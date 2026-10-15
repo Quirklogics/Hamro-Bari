@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}आवाज अर्डर · {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="voice-layout"
+     id="voice-app"
+     data-gemini-configured="{{ 'true' if gemini_configured else 'false' }}"
+     data-max-audio-bytes="{{ max_audio_bytes }}"
+     data-max-transcript-chars="{{ max_transcript_chars }}"
+     data-required-fields="{{ required_fields | join(',') }}">
+
+  <section class="voice-card">
+    <div class="voice-head">
+      <h2>बोलेर अर्डर गर्नुहोस् · Speak your order</h2>
+      <p class="muted">
+        नेपाली, English, वा Romanized Nepali मा बोल्नुहोस् — जस्तै
+        <em>“मलाई २५ किलो प्याज चाहियो”</em> वा <em>“mero sanga 100 kilo alu cha”</em>।
+      </p>
+    </div>
+
+    {% if not gemini_configured %}
+      <div class="notice notice-warn" id="ai-off-notice">
+        <strong>AI सहायक निष्क्रिय छ / AI assistant is offline.</strong>
+        The server has no <code>GEMINI_API_KEY</code>, so speech is not sent to
+        Gemini and nothing is auto-filled. You can still type the order below —
+        the request will be stored and reviewed by an administrator exactly the same way.
+        To enable AI: add your key to <code>voice_ordering/.env</code> and restart the server.
+      </div>
+    {% endif %}
+
+    <div class="voice-controls">
+      <label class="field compact">
+        <span class="field-label">भाषा · Language</span>
+        <select id="language-select">
+          <option value="unknown">स्वतः पत्ता लगाउने · Auto detect</option>
+          {% for lang in languages if lang != 'unknown' %}
+            <option value="{{ lang }}">{{ language_labels[lang] }} ({{ lang }})</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <div class="quick-type" role="group" aria-label="Who is speaking">
+        <span class="field-label">तपाईं को हुनुहुन्छ?</span>
+        <button type="button" class="chip chip-toggle" data-quick-user-type="customer">🛒 ग्राहक · Customer</button>
+        <button type="button" class="chip chip-toggle" data-quick-user-type="farmer">👨‍🌾 किसान · Farmer</button>
+      </div>
+    </div>
+
+    <div class="mic-zone">
+      <button type="button" id="mic-button" class="mic-button" aria-pressed="false"
+              aria-label="Start recording your order"
+              {% if not gemini_configured %}data-ai-off="true"{% endif %}>
+        <span class="mic-glyph" aria-hidden="true">🎙</span>
+        <span class="mic-label" id="mic-label">थिच्नुहोस् र बोल्नुहोस्<small>Tap to speak</small></span>
+      </button>
+      <canvas id="waveform" class="waveform" width="600" height="80" aria-hidden="true"></canvas>
+      <div class="mic-status">
+        <span id="recording-timer" class="timer" hidden>00:00</span>
+        <span id="mic-status-text" class="muted">Microphone is off.</span>
+      </div>
+      <p class="muted small" id="speech-support-note">
+        Live preview uses the browser speech engine when available; the recording
+        itself is transcribed by the server.
+      </p>
+      <audio id="audio-playback" controls hidden></audio>
+    </div>
+
+    <div class="transcript-block">
+      <div class="block-head">
+        <h3>बोलेको कुरा · Your spoken message</h3>
+        <span class="badge badge-muted" id="transcript-source">not recorded yet</span>
+      </div>
+      <textarea id="transcript-input" rows="3" maxlength="{{ max_transcript_chars }}"
+                placeholder="यहाँ तपाईंको बोली देखिनेछ, वा सिधै टाइप गर्न सक्नुहुन्छ…"></textarea>
+      <div class="block-actions">
+        <button type="button" class="btn btn-secondary" id="btn-extract" disabled>
+          ✨ विवरण निकाल्नुहोस् · Extract details
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-clear">Clear</button>
+      </div>
+      <div id="extract-feedback" class="flash-stack" hidden></div>
+    </div>
+  </section>
+
+  <section class="review-card" id="review-section">
+    <div class="card-head">
+      <h2>पुष्टि गर्नुहोस् · Confirm the details</h2>
+      <span class="badge badge-info" id="review-state">manual entry</span>
+    </div>
+    <p class="muted small">
+      बोलेको कुराबाट निकालिएका विवरण जाँच्नुहोस् र आवश्यक भएमा सुधार्नुहोस्। कृपया
+      अनुमान नगर्नुहोस् — थाहा नभएको कुरा खाली छोड्नुहोस्।
+      Review what was understood and fix anything wrong. Leave unknown values empty;
+      nothing is guessed on your behalf.
+    </p>
+
+    <div id="flag-region" class="flag-grid" hidden></div>
+
+    <form id="order-form" class="form-stack" novalidate>
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">नाम · Your name <span class="req">*</span></span>
+          <input type="text" name="requester_name" maxlength="120" autocomplete="name" placeholder="राम बहादुर">
+        </label>
+        <label class="field">
+          <span class="field-label">फोन · Phone (optional)</span>
+          <input type="tel" name="phone" maxlength="25" placeholder="+977 98…">
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">तपाईं · You are <span class="req">*</span></span>
+          <select name="user_type">
+            <option value="">— छान्नुहोस् / select —</option>
+            {% for ut in user_types %}
+              <option value="{{ ut }}">{{ user_type_labels[ut].ne }} · {{ user_type_labels[ut].en }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">अनुरोध · Request <span class="req">*</span></span>
+          <select name="request_type">
+            <option value="">— छान्नुहोस् / select —</option>
+            {% for rt in request_types %}
+              <option value="{{ rt }}">{{ request_type_labels[rt].ne }} · {{ request_type_labels[rt].en }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+
+      <label class="field">
+        <span class="field-label">उत्पादन · Product <span class="req">*</span></span>
+        <input type="text" name="product_name" maxlength="120" list="canonical-products" placeholder="गोलभेंडा / Tomato">
+        <datalist id="canonical-products">
+          {% for product in product_aliases %}<option value="{{ product }}"></option>{% endfor %}
+        </datalist>
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">परिमाण · Quantity <span class="req">*</span></span>
+          <input type="number" step="0.001" min="0" name="quantity" placeholder="50">
+        </label>
+        <label class="field">
+          <span class="field-label">एकाइ · Unit <span class="req">*</span></span>
+          <select name="unit">
+            <option value="">— छान्नुहोस् / select —</option>
+            {% for unit in units %}
+              <option value="{{ unit }}">{{ unit_labels[unit].ne }} · {{ unit_labels[unit].en }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">प्रति एकाइ मूल्य · Price / unit (रु., optional)</span>
+          <input type="number" step="0.01" min="0" name="price_per_unit" placeholder="65">
+        </label>
+        <label class="field">
+          <span class="field-label">अनुमानित जम्मा · Expected total (रु., optional)</span>
+          <input type="number" step="0.01" min="0" name="expected_total" placeholder="3250">
+        </label>
+      </div>
+
+      <label class="field">
+        <span class="field-label">स्थान · Delivery / pickup location <span class="req">*</span></span>
+        <input type="text" name="location" maxlength="200" placeholder="हट्टिबन, ललितपुर">
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">डेलिभरी वा पिकअप · Delivery or pickup</span>
+          <select name="fulfillment_type">
+            <option value="">— unknown —</option>
+            {% for ft in fulfillment_types %}
+              <option value="{{ ft }}">{{ fulfillment_labels[ft].ne }} · {{ fulfillment_labels[ft].en }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">मिति · Requested date (optional)</span>
+          <input type="date" name="requested_date">
+        </label>
+      </div>
+      <label class="field" id="date-text-field" hidden>
+        <span class="field-label">बोलेको मिति · Date as spoken</span>
+        <input type="text" name="requested_date_text" maxlength="120" readonly>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg" id="btn-submit">
+          📩 अनुरोध पठाउनुहोस् · Submit for review
+        </button>
+        <span class="muted small">
+          तपाईंको अनुरोध प्रशासकले जाँच गरेपछि मात्र स्वीकृत हुन्छ।
+          Nothing is approved automatically — an administrator reviews every request.
+        </span>
+      </div>
+      <div id="submit-feedback" class="flash-stack" hidden></div>
+    </form>
+  </section>
+
+  <section class="result-card" id="result-card" hidden>
+    <h2>✅ अनुरोध पठाइयो · Request submitted</h2>
+    <p id="result-message" class="lead"></p>
+    <div class="request-code-box">
+      <span>Request ID</span>
+      <strong id="result-code">—</strong>
+    </div>
+    <p class="muted small">
+      यो कोड र लिंक सुरक्षित राख्नुहोस् — यसैबाट तपाईंको अनुरोधको स्थिति हेर्न सकिन्छ।
+      Keep this code and tracking link; they are the only way to follow an
+      anonymous request. The link is stored in this browser only.
+    </p>
+    <div class="block-actions">
+      <a class="btn btn-primary" id="result-track-link" href="{{ url_for('public.track_page') }}">Track my requests</a>
+      <button type="button" class="btn btn-ghost" id="btn-new-request">New request</button>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+{% endblock %}

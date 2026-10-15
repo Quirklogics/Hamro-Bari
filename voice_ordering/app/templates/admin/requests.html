@@ -1,0 +1,190 @@
+{% extends "admin/base.html" %}
+{% block title %}Requests · {{ app_name }}{% endblock %}
+{% block page_title %}अनुरोधहरू · Requests{% endblock %}
+{% block page_subtitle %}{{ pagination.total }} request(s) matching the current filters{% endblock %}
+
+{% macro page_url(page_number) -%}
+{{ url_for('admin.requests_page') }}?{% for key, values in request.args.lists() if key != 'page' %}{% for value in values %}{{ key }}={{ value | urlencode }}&{% endfor %}{% endfor %}page={{ page_number }}
+{%- endmacro %}
+
+{% block content %}
+<form class="filter-bar" method="get" action="{{ url_for('admin.requests_page') }}" role="search">
+  <label class="field grow">
+    <span class="field-label">खोज्नुहोस् · Search</span>
+    <input type="search" name="q" value="{{ filters.q }}" placeholder="Request ID, name, phone, product, transcript…">
+  </label>
+
+  <label class="field">
+    <span class="field-label">Status</span>
+    <select name="status" multiple size="1" class="multi">
+      {% for status in C.STATUSES %}
+        <option value="{{ status }}" {% if status in filters.status %}selected{% endif %}>
+          {{ C.STATUS_LABELS[status].en }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Buying / selling</span>
+    <select name="request_type">
+      <option value="">All</option>
+      {% for rt in C.REQUEST_TYPES %}
+        <option value="{{ rt }}" {% if filters.request_type == rt %}selected{% endif %}>{{ C.REQUEST_TYPE_LABELS[rt].en }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Farmer / customer</span>
+    <select name="user_type">
+      <option value="">All</option>
+      {% for ut in C.USER_TYPES %}
+        <option value="{{ ut }}" {% if filters.user_type == ut %}selected{% endif %}>{{ C.USER_TYPE_LABELS[ut].en }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Product</span>
+    <select name="product">
+      <option value="">All</option>
+      {% for product in products %}
+        <option value="{{ product }}" {% if filters.product == product %}selected{% endif %}>{{ product }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">From</span>
+    <input type="date" name="date_from" value="{{ filters.date_from }}">
+  </label>
+
+  <label class="field">
+    <span class="field-label">To</span>
+    <input type="date" name="date_to" value="{{ filters.date_to }}">
+  </label>
+
+  <label class="field">
+    <span class="field-label">Sort</span>
+    <select name="sort">
+      <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest first</option>
+      <option value="oldest" {% if filters.sort == 'oldest' %}selected{% endif %}>Oldest first</option>
+      <option value="quantity" {% if filters.sort == 'quantity' %}selected{% endif %}>Largest quantity</option>
+      <option value="product" {% if filters.sort == 'product' %}selected{% endif %}>Product A–Z</option>
+      <option value="status" {% if filters.sort == 'status' %}selected{% endif %}>Status</option>
+    </select>
+  </label>
+
+  <div class="filter-actions">
+    <button type="submit" class="btn btn-primary">Apply filters</button>
+    <a class="btn btn-ghost" href="{{ url_for('admin.requests_page') }}">Reset</a>
+  </div>
+</form>
+
+<div class="status-chips">
+  <a class="chip {% if not filters.status %}active{% endif %}" href="{{ url_for('admin.requests_page') }}">
+    All <span class="chip-count">{{ counts.total }}</span>
+  </a>
+  {% for status in C.STATUSES %}
+    <a class="chip chip-{{ C.STATUS_LABELS[status].tone }} {% if filters.status == [status] %}active{% endif %}"
+       href="{{ url_for('admin.requests_page', status=status) }}">
+      {{ C.STATUS_LABELS[status].en }} <span class="chip-count">{{ counts[status] }}</span>
+    </a>
+  {% endfor %}
+</div>
+
+<div id="requests-table-region">
+  {% if pagination.items %}
+    <div class="table-wrap">
+      <table class="table table-requests">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Customer / farmer</th>
+            <th>Type</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in pagination.items %}
+            <tr>
+              <td>
+                <a class="code" href="{{ url_for('admin.request_detail', request_id=req.id) }}">{{ req.request_code }}</a>
+                {% if req.missing_fields %}<br><span class="badge badge-info">needs info</span>{% endif %}
+              </td>
+              <td>
+                {{ req.requester_name or '—' }}
+                <small class="muted">
+                  {{ C.USER_TYPE_LABELS.get(req.user_type, {}).get('en', 'unknown') }}
+                  {% if req.phone %}· {{ req.phone }}{% endif %}
+                </small>
+              </td>
+              <td><span class="pill pill-{{ req.request_type or 'unknown' }}">{{ C.REQUEST_TYPE_LABELS.get(req.request_type, {}).get('en', '—') }}</span></td>
+              <td>
+                {{ req.product_name or '—' }}
+                {% if req.language %}<small class="muted">· {{ req.language }}</small>{% endif %}
+              </td>
+              <td class="nowrap">{{ req.quantity_display }}</td>
+              <td>{{ req.location or '—' }}</td>
+              <td class="nowrap">{{ req.created_at | datetime_npt('%b %d, %H:%M') }}</td>
+              <td><span class="badge badge-{{ req.status_label.tone }}">{{ req.status_label.en }}</span></td>
+              <td class="row-actions">
+                <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.request_detail', request_id=req.id) }}">Open</a>
+                {% if req.status == 'pending' %}
+                  <button type="button" class="btn btn-primary btn-sm" data-quick-approve="{{ req.id }}" data-code="{{ req.request_code }}">Approve</button>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <nav class="pagination" aria-label="Pagination">
+      <span class="muted">
+        Page {{ pagination.page }} of {{ pagination.pages or 1 }} · {{ pagination.total }} request(s)
+      </span>
+      <div class="pagination-links">
+        {% if pagination.has_prev %}
+          <a class="btn btn-ghost btn-sm" href="{{ page_url(pagination.prev_num) }}">← Previous</a>
+        {% else %}
+          <span class="btn btn-ghost btn-sm disabled">← Previous</span>
+        {% endif %}
+        {% for p in pagination.iter_pages(left_edge=1, left_current=2, right_current=2, right_edge=1) %}
+          {% if p %}
+            {% if p == pagination.page %}
+              <span class="btn btn-primary btn-sm">{{ p }}</span>
+            {% else %}
+              <a class="btn btn-ghost btn-sm" href="{{ page_url(p) }}">{{ p }}</a>
+            {% endif %}
+          {% else %}
+            <span class="muted">…</span>
+          {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+          <a class="btn btn-ghost btn-sm" href="{{ page_url(pagination.next_num) }}">Next →</a>
+        {% else %}
+          <span class="btn btn-ghost btn-sm disabled">Next →</span>
+        {% endif %}
+      </div>
+    </nav>
+  {% else %}
+    <div class="empty-state">
+      <span class="empty-icon" aria-hidden="true">🔍</span>
+      <h3>No requests match these filters</h3>
+      <p>Try clearing the search box, widening the dates, or picking another status.</p>
+      <a class="btn btn-primary" href="{{ url_for('admin.requests_page') }}">Clear filters</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

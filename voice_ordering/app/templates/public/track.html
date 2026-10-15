@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}मेरा अनुरोधहरू · {{ app_name }}{% endblock %}
+
+{% block content %}
+<div id="track-app">
+  <div class="track-head">
+    <div>
+      <h2>मेरा अनुरोधहरू · My requests</h2>
+      <p class="muted">
+        यो ब्राउजरबाट पठाइएका अनुरोधहरू मात्र देखिन्छन्। ट्र्याकिङ लिंक यही ब्राउजरमा
+        भण्डारण गरिएको छ र सर्भरले यसलाई कहीं सार्वजनिक रूपमा देखाउँदैन।
+        Only requests submitted from this browser appear here; the tracking token is
+        stored locally and is never listed publicly.
+      </p>
+    </div>
+    <div class="block-actions">
+      <button type="button" class="btn btn-secondary" id="btn-refresh">↻ Refresh statuses</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="btn-forget">Forget all local entries</button>
+    </div>
+  </div>
+
+  <div id="track-feedback" class="flash-stack" hidden></div>
+  <div id="track-loading" class="skeleton-list" hidden>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  </div>
+
+  <div id="track-list" class="track-list"></div>
+
+  <div class="empty-state" id="track-empty" hidden>
+    <span class="empty-icon" aria-hidden="true">🎙</span>
+    <h3>अहिलेसम्म कुनै अनुरोध छैन · No requests yet</h3>
+    <p>Record your first order and it will show up here with its review status.</p>
+    <a class="btn btn-primary" href="{{ url_for('public.voice_home') }}">Speak an order</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/track.js') }}"></script>
+{% endblock %}

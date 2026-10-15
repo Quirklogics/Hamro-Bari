@@ -1,0 +1,55 @@
+{% extends "admin/base.html" %}
+{% block title %}Notifications · {{ app_name }}{% endblock %}
+{% block page_title %}सूचनाहरू · Notifications{% endblock %}
+{% block page_subtitle %}{{ unread }} unread of {{ items|length }} shown{% endblock %}
+{% block page_actions %}
+  {% if unread %}
+    <button type="button" class="btn btn-ghost" id="mark-all-read">Mark all read</button>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="notice notice-info">
+  Delivery channel: <strong>in-app</strong>. This system does not integrate SMS,
+  email or push providers, so no notification here reports an external delivery.
+  Requester-side notifications are shown on their tracking page.
+</div>
+
+{% if items %}
+  <ul class="notification-list card" id="notification-list">
+    {% for note in items %}
+      <li class="notification {% if not note.is_read %}unread{% endif %}" data-id="{{ note.id }}">
+        <div class="notification-body">
+          <div class="notification-title">
+            <strong>{{ note.title }}</strong>
+            <span class="badge badge-{{ 'pending' if note.audience == 'admin' else 'info' }}">{{ note.audience }}</span>
+            <span class="badge badge-muted">{{ note.event }}</span>
+          </div>
+          <p>{{ note.message }}</p>
+          <small class="muted">
+            {{ note.created_at | datetime_npt('%Y-%m-%d %H:%M') }} UTC+5:45
+            {% if note.request_code %}
+              · <a href="{{ url_for('admin.requests_page', q=note.request_code) }}">{{ note.request_code }}</a>
+            {% endif %}
+          </small>
+        </div>
+        {% if not note.is_read %}
+          <button type="button" class="btn btn-ghost btn-sm" data-mark-read="{{ note.id }}">Mark read</button>
+        {% else %}
+          <span class="muted small">read {{ note.read_at | datetime_npt('%b %d, %H:%M') }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty-state">
+    <span class="empty-icon" aria-hidden="true">🔔</span>
+    <h3>No notifications</h3>
+    <p>New voice requests and administrator decisions will show up here.</p>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

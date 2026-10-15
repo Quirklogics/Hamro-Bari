@@ -1,0 +1,285 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ req.request_code }} · {{ app_name }}{% endblock %}
+{% block page_title %}{{ req.request_code }}{% endblock %}
+{% block page_subtitle %}
+  <span class="badge badge-{{ req.status_label.tone }}">{{ req.status_label.en }} · {{ req.status_label.ne }}</span>
+  <span class="muted">Submitted {{ req.created_at | datetime_npt('%Y-%m-%d %H:%M') }} (UTC+5:45)</span>
+{% endblock %}
+{% block page_actions %}
+  <a class="btn btn-ghost" href="{{ url_for('admin.requests_page') }}">← Back to list</a>
+{% endblock %}
+
+{% block content %}
+<div class="detail-layout">
+  <div class="detail-main">
+    <section class="card">
+      <div class="card-head">
+        <h2>अनुरोध विवरण · Request details</h2>
+        <span class="muted small">Last updated {{ req.updated_at | datetime_npt('%Y-%m-%d %H:%M') }}</span>
+      </div>
+      <dl class="detail-grid">
+        <div><dt>Requester</dt><dd>{{ req.requester_name or '— not provided —' }}</dd></div>
+        <div><dt>Phone</dt><dd>{{ req.phone or '— not provided —' }}</dd></div>
+        <div><dt>User type</dt><dd>{{ C.USER_TYPE_LABELS.get(req.user_type, {}).get('en', '—') }}</dd></div>
+        <div><dt>Request type</dt><dd>{{ C.REQUEST_TYPE_LABELS.get(req.request_type, {}).get('en', '—') }}</dd></div>
+        <div><dt>Product</dt><dd>{{ req.product_name or '—' }}</dd></div>
+        <div><dt>Quantity</dt><dd>{{ req.quantity_display }}</dd></div>
+        <div><dt>Price / unit</dt><dd>{{ ('रु. %s' | format(req.price_per_unit)) if req.price_per_unit else '—' }}</dd></div>
+        <div><dt>Expected total</dt><dd>{{ ('रु. %s' | format(req.expected_total)) if req.expected_total else '—' }}</dd></div>
+        <div><dt>Location</dt><dd>{{ req.location or '—' }}</dd></div>
+        <div><dt>Delivery / pickup</dt><dd>{{ C.FULFILLMENT_LABELS.get(req.fulfillment_type, {}).get('en', '—') }}</dd></div>
+        <div><dt>Requested date</dt><dd>{{ req.requested_date or req.requested_date_text or '—' }}</dd></div>
+        <div><dt>Language</dt><dd>{{ req.language or '—' }}</dd></div>
+        <div><dt>AI confidence</dt>
+          <dd>
+            {% if req.ai_confidence is not none %}
+              {{ (req.ai_confidence * 100) | round(0) | int }}%
+            {% else %}
+              —
+            {% endif %}
+          </dd>
+        </div>
+        <div><dt>Decided</dt>
+          <dd>
+            {% if req.decided_at %}
+              {{ req.decided_at | datetime_npt('%Y-%m-%d %H:%M') }}
+              {% if req.decided_by %}by {{ req.decided_by.username }}{% endif %}
+            {% else %}
+              pending review
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+      {% if req.admin_notes %}
+        <div class="admin-note">
+          <strong>Administrator note</strong>
+          <p>{{ req.admin_notes }}</p>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>मूल आवाज ट्रान्सक्रिप्ट · Original speech</h2>
+        <span class="muted small">{{ req.transcript | length if req.transcript else 0 }} characters</span>
+      </div>
+      {% if req.transcript %}
+        <blockquote class="transcript">{{ req.transcript }}</blockquote>
+      {% else %}
+        <p class="muted">No transcript was stored for this request.</p>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>AI निकालिएको जानकारी · Parsed order information</h2>
+      </div>
+      {% if req.missing_fields or req.ambiguities %}
+        <div class="flag-grid">
+          {% if req.missing_fields %}
+            <div class="flag-block warn">
+              <strong>Missing required fields</strong>
+              <ul>
+                {% for field in req.missing_fields %}
+                  <li>{{ C.FIELD_LABELS.get(field, {}).get('en', field) }} <small class="muted">({{ field }})</small></li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          {% if req.ambiguities %}
+            <div class="flag-block info">
+              <strong>Uncertain / needs confirmation</strong>
+              <ul>
+                {% for item in req.ambiguities %}
+                  <li>
+                    <span class="mono">{{ item.field }}</span> — {{ item.reason }}
+                    {% if item.question %}<br><small class="muted">{{ item.question }}</small>{% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <p class="muted">No missing or uncertain fields were reported for this request.</p>
+      {% endif %}
+
+      {% if req.parsed_data %}
+        <details class="raw-json">
+          <summary>Raw extracted JSON (for auditing)</summary>
+          <pre>{{ req.parsed_data | tojson(indent=2) }}</pre>
+        </details>
+      {% endif %}
+    </section>
+
+    {% if req.edits %}
+      <section class="card">
+        <div class="card-head"><h2>परिवर्तनको अभिलेख · Change audit trail</h2></div>
+        <table class="table">
+          <thead><tr><th>Field</th><th>Old value</th><th>New value</th><th>By</th><th>When</th></tr></thead>
+          <tbody>
+            {% for edit in req.edits %}
+              <tr>
+                <td class="mono">{{ edit.field }}</td>
+                <td>{{ edit.old_value or '—' }}</td>
+                <td>{{ edit.new_value or '—' }}</td>
+                <td>{{ edit.actor_label }}</td>
+                <td class="nowrap">{{ edit.created_at | datetime_npt('%Y-%m-%d %H:%M') }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    {% endif %}
+  </div>
+
+  <aside class="detail-side">
+    <section class="card">
+      <div class="card-head"><h2>निर्णय · Decision</h2></div>
+
+      <div id="decision-feedback" class="flash-stack" hidden></div>
+
+      {% if 'approved' in transitions %}
+        <button type="button" class="btn btn-primary btn-block" id="btn-approve"
+                data-request-id="{{ req.id }}" data-code="{{ req.request_code }}">Approve request</button>
+      {% endif %}
+      {% if 'rejected' in transitions %}
+        <button type="button" class="btn btn-danger btn-block" id="btn-reject-open">Reject request</button>
+      {% endif %}
+      {% if 'clarification_required' in transitions %}
+        <button type="button" class="btn btn-secondary btn-block" id="btn-clarify-open">Request clarification</button>
+      {% endif %}
+
+      {% if not transitions %}
+        <p class="muted small">
+          This request is <strong>{{ req.status_label.en }}</strong> and is final.
+          Approved and rejected requests cannot change status again, so the audit
+          trail stays trustworthy. Ask the requester to submit a new request instead.
+        </p>
+      {% else %}
+        <p class="muted small">
+          Approving or rejecting asks for confirmation and is recorded with your
+          name and the time. The requester sees the new status on their tracking page.
+        </p>
+      {% endif %}
+
+      <div id="reject-form" class="inline-form" hidden>
+        <label class="field">
+          <span class="field-label">Reason for rejection (required, stored in the database)</span>
+          <textarea id="reject-reason" rows="3" maxlength="2000" placeholder="e.g. Quantity is not available this week."></textarea>
+        </label>
+        <div class="inline-form-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-cancel-reject>Cancel</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-reject-submit">Confirm rejection</button>
+        </div>
+      </div>
+
+      <div id="clarify-form" class="inline-form" hidden>
+        <label class="field">
+          <span class="field-label">Question for the requester (required)</span>
+          <textarea id="clarify-question" rows="3" maxlength="1000" placeholder="e.g. Which unit do you mean — किलो or क्रेट?"></textarea>
+        </label>
+        <div class="inline-form-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-cancel-clarify>Cancel</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-clarify-submit">Send question</button>
+        </div>
+      </div>
+    </section>
+
+    {% if editable %}
+      <section class="card">
+        <div class="card-head"><h2>विवरण सुधार्नुहोस् · Edit details</h2></div>
+        <form id="edit-form" data-request-id="{{ req.id }}" class="form-stack">
+          <label class="field"><span class="field-label">Requester name</span>
+            <input type="text" name="requester_name" value="{{ req.requester_name or '' }}" maxlength="120"></label>
+          <label class="field"><span class="field-label">Phone</span>
+            <input type="tel" name="phone" value="{{ req.phone or '' }}" maxlength="25" placeholder="+97798…"></label>
+          <label class="field"><span class="field-label">User type</span>
+            <select name="user_type">
+              <option value="">— unknown —</option>
+              {% for ut in C.USER_TYPES %}
+                <option value="{{ ut }}" {% if req.user_type == ut %}selected{% endif %}>{{ C.USER_TYPE_LABELS[ut].en }}</option>
+              {% endfor %}
+            </select></label>
+          <label class="field"><span class="field-label">Request type</span>
+            <select name="request_type">
+              <option value="">— unknown —</option>
+              {% for rt in C.REQUEST_TYPES %}
+                <option value="{{ rt }}" {% if req.request_type == rt %}selected{% endif %}>{{ C.REQUEST_TYPE_LABELS[rt].en }}</option>
+              {% endfor %}
+            </select></label>
+          <label class="field"><span class="field-label">Product</span>
+            <input type="text" name="product_name" value="{{ req.product_name or '' }}" maxlength="120" list="product-options"></label>
+          <div class="field-row">
+            <label class="field"><span class="field-label">Quantity</span>
+              <input type="number" step="0.001" min="0" name="quantity" value="{{ req.quantity if req.quantity is not none else '' }}"></label>
+            <label class="field"><span class="field-label">Unit</span>
+              <select name="unit">
+                <option value="">—</option>
+                {% for unit in units %}
+                  <option value="{{ unit }}" {% if req.unit == unit %}selected{% endif %}>{{ unit_labels[unit].en }}</option>
+                {% endfor %}
+              </select></label>
+          </div>
+          <div class="field-row">
+            <label class="field"><span class="field-label">Price / unit (रु.)</span>
+              <input type="number" step="0.01" min="0" name="price_per_unit" value="{{ req.price_per_unit if req.price_per_unit is not none else '' }}"></label>
+            <label class="field"><span class="field-label">Expected total (रु.)</span>
+              <input type="number" step="0.01" min="0" name="expected_total" value="{{ req.expected_total if req.expected_total is not none else '' }}"></label>
+          </div>
+          <label class="field"><span class="field-label">Location</span>
+            <input type="text" name="location" value="{{ req.location or '' }}" maxlength="200"></label>
+          <label class="field"><span class="field-label">Delivery / pickup</span>
+            <select name="fulfillment_type">
+              <option value="">— unknown —</option>
+              {% for ft in C.FULFILLMENT_TYPES %}
+                <option value="{{ ft }}" {% if req.fulfillment_type == ft %}selected{% endif %}>{{ C.FULFILLMENT_LABELS[ft].en }}</option>
+              {% endfor %}
+            </select></label>
+          <label class="field"><span class="field-label">Requested date</span>
+            <input type="date" name="requested_date" value="{{ req.requested_date or '' }}"></label>
+          <label class="field"><span class="field-label">Administrator note (replaces the current note)</span>
+            <textarea name="admin_notes" rows="3" maxlength="2000">{{ req.admin_notes or '' }}</textarea></label>
+          <button type="submit" class="btn btn-primary btn-block">Save corrections</button>
+          <p class="muted small">Every change is stored field by field in the audit trail with your account name.</p>
+        </form>
+        <datalist id="product-options">
+          {% for product in C.PRODUCT_ALIASES.values() | map(attribute='en') | unique | list %}
+            <option value="{{ product }}"></option>
+          {% endfor %}
+        </datalist>
+      </section>
+    {% else %}
+      <section class="card">
+        <p class="muted small">
+          Details can only be corrected while a request is pending or awaiting
+          clarification.
+        </p>
+      </section>
+    {% endif %}
+
+    <section class="card">
+      <div class="card-head"><h2>स्थिति इतिहास · Status history</h2></div>
+      <ol class="timeline">
+        {% for entry in req.status_history %}
+          <li>
+            <span class="timeline-dot"></span>
+            <div>
+              <strong>{{ entry.action.replace('_', ' ') }}</strong>
+              <small class="muted">
+                {% if entry.from_status %}{{ entry.from_status }} → {% endif %}{{ entry.to_status }}
+              </small>
+              <div class="muted small">{{ entry.actor_label }} · {{ entry.created_at | datetime_npt('%Y-%m-%d %H:%M') }}</div>
+              {% if entry.reason %}<p class="timeline-reason">{{ entry.reason }}</p>{% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

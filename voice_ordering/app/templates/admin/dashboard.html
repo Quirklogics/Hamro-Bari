@@ -1,0 +1,131 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard · {{ app_name }}{% endblock %}
+{% block page_title %}ड्यासबोर्ड · Dashboard{% endblock %}
+{% block page_subtitle %}Voice order requests awaiting review{% endblock %}
+{% block page_actions %}
+  <a class="btn btn-primary" href="{{ url_for('admin.requests_page', status='pending') }}">
+    Review pending ({{ counts.pending }})
+  </a>
+{% endblock %}
+
+{% block content %}
+<section class="stat-grid" aria-label="Request counters">
+  <a class="stat-card" href="{{ url_for('admin.requests_page') }}">
+    <span class="stat-label">कुल अनुरोध <small>Total requests</small></span>
+    <span class="stat-value">{{ counts.total | nepali_number }}</span>
+  </a>
+  <a class="stat-card warn" href="{{ url_for('admin.requests_page', status='pending') }}">
+    <span class="stat-label">प्रतीक्षामा <small>Pending</small></span>
+    <span class="stat-value">{{ counts.pending | nepali_number }}</span>
+  </a>
+  <a class="stat-card ok" href="{{ url_for('admin.requests_page', status='approved') }}">
+    <span class="stat-label">स्वीकृत <small>Approved</small></span>
+    <span class="stat-value">{{ counts.approved | nepali_number }}</span>
+  </a>
+  <a class="stat-card bad" href="{{ url_for('admin.requests_page', status='rejected') }}">
+    <span class="stat-label">अस्वीकृत <small>Rejected</small></span>
+    <span class="stat-value">{{ counts.rejected | nepali_number }}</span>
+  </a>
+  <a class="stat-card info" href="{{ url_for('admin.requests_page', status='clarification_required') }}">
+    <span class="stat-label">स्पष्टीकरण <small>Needs clarification</small></span>
+    <span class="stat-value">{{ counts.clarification_required | nepali_number }}</span>
+  </a>
+</section>
+
+{% if not gemini_configured %}
+  <div class="notice notice-warn">
+    <strong>Gemini API key is not configured.</strong>
+    Speech transcription and AI extraction are disabled, so new requests arrive
+    with the transcript only. Set <code>GEMINI_API_KEY</code> in
+    <code>voice_ordering/.env</code> and restart to enable AI parsing.
+  </div>
+{% endif %}
+
+<section class="panel-grid">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>नयाँ अनुरोधहरू · Recent submissions</h2>
+      <a class="link" href="{{ url_for('admin.requests_page') }}">View all →</a>
+    </div>
+    {% if recent %}
+      <table class="table">
+        <thead>
+          <tr><th>ID</th><th>Requester</th><th>Request</th><th>Location</th><th>Status</th><th>Submitted</th></tr>
+        </thead>
+        <tbody>
+          {% for req in recent %}
+            <tr>
+              <td><a class="code" href="{{ url_for('admin.request_detail', request_id=req.id) }}">{{ req.request_code }}</a></td>
+              <td>
+                {{ req.requester_name or '—' }}
+                {% if req.phone %}<small class="muted">{{ req.phone }}</small>{% endif %}
+              </td>
+              <td>
+                <span class="pill pill-{{ req.request_type or 'unknown' }}">
+                  {{ C.REQUEST_TYPE_LABELS.get(req.request_type, {}).get('en', '—') }}
+                </span>
+                {{ req.product_name or '—' }}
+                <small class="muted">{{ req.quantity_display }}</small>
+              </td>
+              <td>{{ req.location or '—' }}</td>
+              <td><span class="badge badge-{{ req.status_label.tone }}">{{ req.status_label.en }}</span></td>
+              <td class="nowrap">{{ req.created_at | datetime_npt('%b %d, %H:%M') }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-icon" aria-hidden="true">🎙</span>
+        <h3>No requests yet</h3>
+        <p>Voice submissions will appear here as soon as someone speaks an order.</p>
+        <a class="btn btn-primary" href="{{ url_for('public.voice_home') }}">Open the voice page</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>सूचनाहरू · Notifications</h2>
+      <div class="panel-head-actions">
+        {% if unread %}
+          <span class="badge badge-pending">{{ unread }} unread</span>
+          <button type="button" class="btn btn-ghost btn-sm" id="mark-all-read">Mark all read</button>
+        {% endif %}
+      </div>
+    </div>
+    {% if notifications %}
+      <ul class="notification-list" id="notification-list">
+        {% for note in notifications %}
+          <li class="notification {% if not note.is_read %}unread{% endif %}" data-id="{{ note.id }}">
+            <div class="notification-body">
+              <strong>{{ note.title }}</strong>
+              <p>{{ note.message }}</p>
+              <small class="muted">
+                {{ note.created_at | datetime_npt('%b %d, %H:%M') }} · in-app
+                {% if note.request_code %}· <a href="{{ url_for('admin.requests_page', q=note.request_code) }}">{{ note.request_code }}</a>{% endif %}
+              </small>
+            </div>
+            {% if not note.is_read %}
+              <button type="button" class="btn btn-ghost btn-sm" data-mark-read="{{ note.id }}">Mark read</button>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-state small">
+        <span class="empty-icon" aria-hidden="true">🔔</span>
+        <p>No notifications yet.</p>
+      </div>
+    {% endif %}
+    <p class="muted small">
+      Notifications are in-app only. No SMS, email or push provider is configured,
+      so nothing here claims an external message was delivered.
+    </p>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

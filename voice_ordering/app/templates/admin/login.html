@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Sign in · {{ app_name }}{% endblock %}
+{% block body_class %}login-body{% endblock %}
+
+{% block body %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-brand">
+      <span class="brand-mark" aria-hidden="true">🌿</span>
+      <div>
+        <strong>हाम्रो बारी</strong>
+        <small>Administrator sign-in</small>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('admin.login') }}" class="form-stack" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="next" value="{{ request.args.get('next') or '' }}">
+      <label class="field">
+        <span class="field-label">Username</span>
+        <input type="text" name="username" value="{{ username }}" required autofocus
+               autocomplete="username" spellcheck="false">
+      </label>
+      <label class="field">
+        <span class="field-label">Password</span>
+        <input type="password" name="password" required autocomplete="current-password">
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" name="remember" value="1"> Keep me signed in on this device
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+
+    <p class="muted small">
+      Accounts are created with
+      <code>flask --app run.py create-admin</code>.
+      Sessions are cookie based and protected with CSRF tokens; failed attempts are rate limited.
+    </p>
+    <p class="small"><a href="{{ url_for('public.voice_home') }}">← Back to the voice ordering page</a></p>
+  </div>
+</div>
+{% endblock %}

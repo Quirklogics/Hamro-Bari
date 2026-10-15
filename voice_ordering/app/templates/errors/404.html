@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Not found · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="empty-state">
+  <span class="empty-icon" aria-hidden="true">🧭</span>
+  <h3>यो पृष्ठ भेटिएन · Page not found</h3>
+  <p>The page you asked for does not exist or has moved.</p>
+  <a class="btn btn-primary" href="{{ url_for('public.voice_home') }}">Back to the voice ordering page</a>
+</div>
+{% endblock %}

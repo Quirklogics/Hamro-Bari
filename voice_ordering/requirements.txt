@@ -1,0 +1,29 @@
+# ==============================================================================
+# हाम्रो बारी Voice Orders - Python dependencies
+# Install:  python -m venv .venv && .venv/Scripts/python -m pip install -r requirements.txt
+# ==============================================================================
+
+# --- Web framework ---
+Flask>=3.1,<4
+
+# --- Database / ORM ---
+Flask-SQLAlchemy>=3.1,<4
+SQLAlchemy>=2.0.30,<2.2
+Flask-Migrate>=4.0,<5          # Alembic migrations: flask db init/migrate/upgrade
+
+# --- Auth, sessions, CSRF, rate limiting ---
+Flask-Login>=0.6.3,<0.7
+Flask-WTF>=1.2,<2              # CSRF protection for cookie-based sessions
+Flask-Limiter>=3.8,<4
+
+# --- Configuration ---
+python-dotenv>=1.0
+
+# --- Gemini AI (server-side only; key never reaches the browser) ---
+google-genai>=1.0
+
+# --- Production PostgreSQL driver (SQLite needs nothing extra) ---
+psycopg2-binary>=2.9.9
+
+# --- Tests ---
+pytest>=8

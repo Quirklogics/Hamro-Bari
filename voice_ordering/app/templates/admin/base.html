@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body_class %}admin-body{% endblock %}
+
+{% block body %}
+<div class="admin-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark" aria-hidden="true">🌿</span>
+      <span class="brand-text">
+        <strong>हाम्रो बारी</strong>
+        <small>Admin Console</small>
+      </span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="{% if active_nav == 'dashboard' %}active{% endif %}">
+        <span class="nav-icon" aria-hidden="true">▤</span> ड्यासबोर्ड <small>Dashboard</small>
+      </a>
+      <a href="{{ url_for('admin.requests_page') }}" class="{% if active_nav == 'requests' %}active{% endif %}">
+        <span class="nav-icon" aria-hidden="true">☰</span> अनुरोधहरू <small>Requests</small>
+      </a>
+      <a href="{{ url_for('admin.notifications_page') }}" class="{% if active_nav == 'notifications' %}active{% endif %}">
+        <span class="nav-icon" aria-hidden="true">🔔</span> सूचनाहरू <small>Notifications</small>
+        {% if admin_unread_count %}
+          <span class="badge badge-pending">{{ admin_unread_count }}</span>
+        {% endif %}
+      </a>
+      <a href="{{ url_for('public.voice_home') }}">
+        <span class="nav-icon" aria-hidden="true">🎙</span> आवाज अर्डर <small>Voice page</small>
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="ai-status {% if gemini_configured %}ok{% else %}off{% endif %}">
+        {% if gemini_configured %}Gemini connected{% else %}Gemini not configured{% endif %}
+      </div>
+      <div class="user-chip">
+        <span class="avatar">{{ current_user.username[0]|upper }}</span>
+        <span>
+          <strong>{{ current_user.full_name or current_user.username }}</strong>
+          <small>{{ current_user.role }}</small>
+        </span>
+      </div>
+      <form method="post" action="{{ url_for('admin.logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-ghost btn-block">Sign out</button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="topbar">
+      <button type="button" class="icon-btn sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">☰</button>
+      <div>
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        <p class="muted">{% block page_subtitle %}{% endblock %}</p>
+      </div>
+      <div class="topbar-actions">
+        <a class="icon-btn notif-bell" href="{{ url_for('admin.notifications_page') }}" aria-label="Notifications">
+          🔔{% if admin_unread_count %}<span class="dot">{{ admin_unread_count }}</span>{% endif %}
+        </a>
+        {% block page_actions %}{% endblock %}
+      </div>
+    </header>
+
+    <main class="admin-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% endblock %}

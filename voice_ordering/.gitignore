@@ -1,0 +1,22 @@
+# Secrets - never commit real credentials
+.env
+
+# Virtual environment
+.venv/
+venv/
+
+# Local SQLite databases
+instance/
+*.sqlite
+*.db
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

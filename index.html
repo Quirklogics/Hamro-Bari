@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="web_standard" name="shell-type"/>
+  <title>हाम्रो बारी (Hamro Baari) - Farm to Community Organic Produce</title>
+  <meta name="description" content="बारीबाट सिधै तपाईंको घरदैलोमा। काभ्रे, धादिङ र मुडेका साना किसानले सोमबार टिपेर बुधबार बिहानै तपाईंको अपार्टमेन्ट र सोसाइटीमा पुर्‍याइने १००% अर्गानिक ताजा तरकारी।"/>
+
+  <!-- Google Fonts: Noto Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#00652c",
+            "primary-container": "#15803d",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#d3ffd5",
+            "primary-fixed": "#95f8a7",
+            "primary-fixed-dim": "#79db8d",
+            "on-primary-fixed-variant": "#005323",
+            "secondary": "#904d00",
+            "secondary-container": "#fe932c",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#663500",
+            "secondary-fixed": "#ffdcc3",
+            "secondary-fixed-dim": "#ffb77d",
+            "tertiary": "#9a3500",
+            "tertiary-container": "#c34500",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#fff0ec",
+            "tertiary-fixed": "#ffdbce",
+            "surface": "#f9f9ff",
+            "surface-dim": "#cfdaf2",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eeff",
+            "surface-container-high": "#dee8ff",
+            "surface-container-highest": "#d8e3fb",
+            "on-surface": "#111c2d",
+            "on-surface-variant": "#3f493f",
+            "outline": "#6f7a6e",
+            "outline-variant": "#becabc",
+            "background": "#f9f9ff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          fontFamily: {
+            sans: ['Noto Sans', 'Inter', 'sans-serif'],
+            display: ['Noto Sans', 'sans-serif'],
+            body: ['Noto Sans', 'sans-serif'],
+            label: ['Inter', 'sans-serif']
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-desktop": "3rem",
+            "gutter-desktop": "2rem"
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+
+<body class="bg-background text-on-surface antialiased transition-colors duration-200">
+
+  <!-- Master Viewport Container (Clean, fully fluid responsive container for PC & Mobile) -->
+  <div id="app-viewport-container" class="w-full flex flex-col min-h-screen pb-20 md:pb-0 transition-all duration-300">
+
+    <!-- ==========================================================================
+         TOP HEADER BAR & ROLE / VIEW NAVIGATION
+         ========================================================================== -->
+    <header class="sticky top-0 w-full z-40 bg-surface/95 backdrop-blur-xl border-b border-primary/10 shadow-[0_1px_8px_rgba(0,0,0,0.03)]">
+      
+      <!-- Top Micro Utility Strip -->
+      <div class="bg-surface-container-low px-4 sm:px-6 lg:px-8 py-1.5 border-b border-primary/5 text-xs text-on-surface-variant">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          
+          <!-- Left: Fresh Produce Tagline & Society Selector -->
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span class="text-primary font-semibold flex items-center gap-1 shrink-0 truncate">
+              <span class="material-symbols-outlined text-[15px]">eco</span>
+              <span class="hidden sm:inline" data-i18n="topBanner">🌱 ताजा अर्गानिक उत्पादनहरू साताको दुई पटक तपाईंको घरदैलोमा</span>
+              <span class="sm:hidden text-xs">🌱 ताजा अर्गानिक बारीबाट सिधै</span>
+            </span>
+            <span class="hidden lg:inline text-outline-variant">|</span>
+            <div class="hidden md:flex items-center gap-1 bg-surface-container-lowest text-primary px-2.5 py-0.5 rounded-full shadow-xs shrink-0">
+              <span class="material-symbols-outlined text-[14px]">apartment</span>
+              <select id="society-select" class="bg-transparent font-medium cursor-pointer focus:outline-none text-xs">
+                <option value="Hattiban Heights &amp; Residency (Lalitpur-28)" selected>हात्तीवन क्लस्टर (Lalitpur-28)</option>
+                <option value="Sanepa Green Society (Sanepa, Lalitpur)">सानेपा ग्रिन सोसाइटी (Sanepa)</option>
+                <option value="Jhamsikhel Community Cluster (Jhamsikhel)">झम्सिखेल कम्युनिटी (Jhamsikhel)</option>
+                <option value="Baluwatar Residential Cluster (Kathmandu)">बालुवाटार रेसिडेन्शियल क्लस्टर</option>
+                <option value="Mandikhatar Garden Homes (Budhanilkantha)">मण्डिखाटार गार्डेन होम्स</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Right: Language Switcher, Device Width Preview & Role Selector -->
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-surface-container-high rounded-full p-0.5 shadow-xs">
+              <button id="lang-btn-ne" onclick="toggleLanguage('ne')" class="px-2.5 py-0.5 rounded-full bg-primary text-on-primary font-bold text-xs transition-all" type="button">नेपाली</button>
+              <button id="lang-btn-en" onclick="toggleLanguage('en')" class="px-2.5 py-0.5 rounded-full text-on-surface-variant hover:text-on-surface text-xs transition-all" type="button">EN</button>
+            </div>
+
+            <!-- Optional PC Screen Width Preview Toggle (Responsive simulation on desktop only) -->
+            <div class="hidden xl:flex items-center bg-surface-container-high rounded-full p-0.5 gap-0.5">
+              <button id="btn-view-desktop" onclick="toggleDeviceMode('desktop')" class="px-2.5 py-0.5 rounded-full bg-primary text-white font-bold text-xs shadow-xs flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">desktop_windows</span>
+                <span>Full</span>
+              </button>
+              <button id="btn-view-mobile" onclick="toggleDeviceMode('mobile')" class="px-2.5 py-0.5 rounded-full text-on-surface-variant hover:text-on-surface text-xs flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">phone_iphone</span>
+                <span>Mobile</span>
+              </button>
+            </div>
+
+            <!-- Role Selector Quick Switcher (Desktop) -->
+            <div class="hidden sm:flex items-center gap-1 text-xs">
+              <span class="text-on-surface-variant font-medium mr-0.5" data-i18n="roleLabel">भूमिका:</span>
+              <button data-role="home" onclick="switchRole('home')" class="role-nav-btn px-2.5 py-0.5 rounded-full bg-primary text-on-primary font-semibold text-xs shadow-xs transition-all">ग्राहक</button>
+              <button data-role="farmer" onclick="switchRole('farmer')" class="role-nav-btn px-2.5 py-0.5 rounded-full text-on-surface-variant hover:text-on-surface text-xs transition-all">किसान</button>
+              <button data-role="admin" onclick="switchRole('admin')" class="role-nav-btn px-2.5 py-0.5 rounded-full text-on-surface-variant hover:text-on-surface text-xs transition-all">व्यवस्थापक</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Main Navigation Header Bar -->
+      <div class="h-16 sm:h-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        
+        <!-- Logo & Brand Identity -->
+        <div class="flex items-center gap-3 cursor-pointer group select-none" onclick="switchRole('home')">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary-container flex items-center justify-center text-on-primary shadow-[0_2px_10px_rgba(21,128,61,0.25)] group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-[24px] sm:text-[28px]">eco</span>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <span class="text-lg sm:text-xl font-extrabold text-primary tracking-tight font-display" data-i18n="brandName">हाम्रो बारी</span>
+              <span class="px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed-variant text-[10px] sm:text-[11px] font-bold">हप्ता #४२</span>
+            </div>
+            <span class="text-[11px] sm:text-xs text-on-surface-variant -mt-0.5 font-medium leading-none" data-i18n="brandTagline">Farm to Community Organic Produce</span>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+          <button data-role="home" onclick="switchRole('home')" class="nav-tab px-3.5 py-1.5 rounded-full font-label-md text-xs sm:text-sm font-bold bg-primary text-white shadow-xs transition-all" data-i18n="navHome">गृह (Home)</button>
+          <button data-role="browse" onclick="switchRole('browse')" class="nav-tab px-3.5 py-1.5 rounded-full font-label-md text-xs sm:text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-i18n="navBrowse">ताजा तरकारी (Catalog)</button>
+          <button data-role="cart" onclick="switchRole('cart')" class="nav-tab px-3.5 py-1.5 rounded-full font-label-md text-xs sm:text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-i18n="navCart">झोला र प्रि-अर्डर</button>
+          <button data-role="farmer" onclick="switchRole('farmer')" class="nav-tab px-3.5 py-1.5 rounded-full font-label-md text-xs sm:text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center gap-1" data-i18n="navFarmer">
+            <span class="material-symbols-outlined text-[15px] text-secondary">mic</span>
+            <span>किसान पोर्टल</span>
+          </button>
+          <button data-role="admin" onclick="switchRole('admin')" class="nav-tab px-3.5 py-1.5 rounded-full font-label-md text-xs sm:text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-i18n="navAdmin">व्यवस्थापक कन्सोल</button>
+        </nav>
+
+        <!-- Right Quick Actions -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Voice Search Quick Trigger -->
+          <button onclick="openVoiceSearchModal()" aria-label="Voice Search" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all relative border border-slate-200/60" title="नेपाली आवाजबाट खोज्नुहोस्">
+            <span class="material-symbols-outlined text-[20px]">mic</span>
+          </button>
+
+          <!-- Cart Action Pill -->
+          <button onclick="switchRole('cart')" class="flex items-center gap-1.5 bg-secondary-container text-on-secondary-container px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-[0_2px_8px_rgba(254,147,44,0.25)] text-xs sm:text-sm font-bold hover:brightness-105 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[18px]">shopping_basket</span>
+            <span class="cart-count-badge">झोला (३)</span>
+          </button>
+
+          <!-- Farmer Profile Avatar (Desktop) -->
+          <div onclick="switchRole('farmer')" class="hidden sm:flex items-center gap-1.5 cursor-pointer" title="किसान प्रोफाइल हेर्नुहोस्">
+            <div class="relative">
+              <img class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-2 ring-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0yXuMTwElU4WxxVwjWNR0wEF7cEs6fcVKitLnhciP5UhbxMaDyZx96cGZdSpgRxjoUTkKlz8feBCHYJzaBdx_VVk7jChMcYzejAPTZtgCAxwfhzPfOrfiko0VlPD55poLBPrctHb74urCHVYFcPdIlMTIUTGStAWZQefwShNfT69NkxQFS2jN1pMWPJ6pZT13RwNsuj4sLIbd-F2w2oQYEqMCA61Lenz5pbKsFiGdW0LKrbjAE7sSQA" alt="Farmer Profile"/>
+              <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-primary rounded-full flex items-center justify-center text-[8px] text-white font-bold">✓</span>
+            </div>
+          </div>
+
+          <!-- Mobile Hamburger Menu Button -->
+          <button onclick="openMobileMenu()" aria-label="Open Mobile Menu" class="md:hidden w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined text-[22px]">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Mobile Slide-over Drawer Menu -->
+    <div id="mobile-drawer" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end">
+      <div class="w-4/5 max-w-xs bg-surface h-full shadow-2xl p-5 flex flex-col justify-between overflow-y-auto">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between pb-3 border-b border-primary/10">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined text-[18px]">eco</span>
+              </div>
+              <span class="font-bold text-primary text-base">हाम्रो बारी</span>
+            </div>
+            <button onclick="closeMobileMenu()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+
+          <!-- Society Selector in Mobile Drawer -->
+          <div class="flex flex-col gap-1 text-xs">
+            <span class="text-on-surface-variant font-medium">तपाईंको सोसाइटी / हब:</span>
+            <select class="w-full bg-surface-container p-2 rounded-xl text-xs font-semibold focus:outline-none" onchange="document.getElementById('society-select').value = this.value;">
+              <option value="Hattiban Heights &amp; Residency (Lalitpur-28)" selected>हात्तीवन क्लस्टर (Lalitpur-28)</option>
+              <option value="Sanepa Green Society (Sanepa, Lalitpur)">सानेपा ग्रिन सोसाइटी (Sanepa)</option>
+              <option value="Jhamsikhel Community Cluster (Jhamsikhel)">झम्सिखेल कम्युनिटी (Jhamsikhel)</option>
+              <option value="Baluwatar Residential Cluster (Kathmandu)">बालुवाटार रेसिडेन्शियल क्लस्टर</option>
+              <option value="Mandikhatar Garden Homes (Budhanilkantha)">मण्डिखाटार गार्डेन होम्स</option>
+            </select>
+          </div>
+
+          <!-- Mobile Nav Links -->
+          <div class="flex flex-col gap-1.5 pt-2">
+            <button onclick="switchRole('home')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container text-left text-sm font-semibold text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-primary text-[20px]">home</span>
+              <span>गृह (Home)</span>
+            </button>
+            <button onclick="switchRole('browse')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container text-left text-sm font-semibold text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-primary text-[20px]">storefront</span>
+              <span>ताजा तरकारी क्याटलग (Catalog)</span>
+            </button>
+            <button onclick="switchRole('cart')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container text-left text-sm font-semibold text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-secondary text-[20px]">shopping_basket</span>
+              <span>झोला र प्रि-अर्डर (Cart)</span>
+            </button>
+            <button onclick="switchRole('farmer')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container text-left text-sm font-semibold text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-secondary text-[20px]">mic</span>
+              <span>किसान पोर्टल (Farmer Voice)</span>
+            </button>
+            <button onclick="switchRole('admin')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container text-left text-sm font-semibold text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-tertiary text-[20px]">local_shipping</span>
+              <span>व्यवस्थापक कन्सोल (Admin Logistics)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-primary/10 flex flex-col gap-3 text-xs text-on-surface-variant">
+          <div class="flex items-center justify-between">
+            <span>भाषा (Language):</span>
+            <div class="flex items-center bg-surface-container rounded-full p-0.5">
+              <button onclick="toggleLanguage('ne')" class="px-2.5 py-0.5 rounded-full bg-primary text-white font-bold text-xs">नेपाली</button>
+              <button onclick="toggleLanguage('en')" class="px-2.5 py-0.5 rounded-full text-xs">EN</button>
+            </div>
+          </div>
+          <p class="text-[11px] text-center text-outline">&copy; 2026 हाम्रो बारी प्रा. लि.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         VIEW 1: CUSTOMER HOME (गृह)
+         ========================================================================== -->
+    <main id="view-home" class="w-full flex flex-col">
+
+      <!-- Top Hero Banner: Weekly Order Cycle & Live Countdown Station -->
+      <section class="w-full relative overflow-hidden bg-gradient-to-br from-surface-container-low via-surface to-surface-container py-8 sm:py-space-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-center">
+            
+            <!-- Main Pitch & CTA Strip -->
+            <div class="lg:col-span-7 flex flex-col gap-space-md">
+              <div class="inline-flex items-center gap-space-xs self-start px-space-md py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-xs sm:text-sm font-bold shadow-xs">
+                <span class="material-symbols-outlined text-[18px]">verified</span>
+                <span>हप्ता #४२ अर्डर खुल्ला छ! • Weekly Pre-Order Open</span>
+              </div>
+              
+              <h1 class="font-display-lg text-3xl sm:text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight leading-tight">
+                बारीमा फल्दै गरेको ताजा तरकारी, <br/>
+                <span class="text-primary font-extrabold">सिधै तपाईंको परिवारको भान्सामा।</span>
+              </h1>
+              
+              <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl" data-i18n="heroDesc">
+                कुनै चिस्यान वा मध्यस्थकर्ता बिना काभ्रे, धादिङ र मुडेका साना किसानले सोमबार टिपेर बुधबार बिहानै तपाईंको घरदैलोमा पुर्‍याइने १००% विषादीरहित ताजा उत्पादन।
+              </p>
+
+              <!-- Society Selector and Instant Pre-Order CTA Strip -->
+              <div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-md flex flex-wrap lg:flex-nowrap items-center gap-space-md mt-2 border border-primary/5">
+                <div class="flex-1 min-w-[220px]">
+                  <label class="block font-label-sm text-xs text-on-surface-variant mb-1" for="society-select-hero" data-i18n="chooseSociety">तपाईंको आवासीय समाज वा टोल चयन गर्नुहोस्</label>
+                  <div class="flex items-center gap-2 text-on-surface bg-surface-container-low px-3 py-2 rounded-xl">
+                    <span class="material-symbols-outlined text-primary text-[20px]">apartment</span>
+                    <select class="bg-transparent font-medium text-sm text-on-surface w-full focus:outline-none cursor-pointer" id="society-select-hero">
+                      <option selected>हात्तीवन हाइट्स &amp; रेसिडेन्सी (Lalitpur-28)</option>
+                      <option>सानेपा ग्रिन सोसाइटी (Sanepa)</option>
+                      <option>झम्सिखेल कम्युनिटी (Jhamsikhel)</option>
+                      <option>बालुवाटार रेसिडेन्शियल क्लस्टर (Kathmandu)</option>
+                      <option>मण्डिखाटार गार्डेन होम्स (Budhanilkantha)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-space-sm w-full lg:w-auto">
+                  <button onclick="switchRole('browse')" class="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-primary text-on-primary font-label-lg font-bold shadow-lg hover:shadow-xl hover:translate-y-[-1px] transition-all">
+                    <span class="material-symbols-outlined text-[20px]">shopping_cart_checkout</span>
+                    <span data-i18n="preorderNow">अहिले अग्रिम अर्डर गर्नुहोस्</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Micro Assurances -->
+              <div class="flex flex-wrap items-center gap-space-lg text-on-surface-variant font-label-sm text-xs pt-1">
+                <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px]">local_shipping</span> निःशुल्क समुदाय डेलिभरी</span>
+                <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px]">payments</span> अनलाइन वा डेलिभरीमा भुक्तानी</span>
+                <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px]">spa</span> १००% शून्य-फोहोर जुटको झोला</span>
+              </div>
+            </div>
+
+            <!-- Right Visual & Live Countdown Station -->
+            <div class="lg:col-span-5 flex flex-col gap-space-md">
+              <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-space-lg shadow-xl relative overflow-hidden border border-primary/5">
+                <div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-secondary-fixed opacity-40 pointer-events-none"></div>
+                
+                <div class="flex items-center justify-between pb-space-md">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-secondary animate-pulse"></span>
+                    <span class="font-headline-sm font-bold text-on-surface" data-i18n="countdownTitle">समयसीमा काउन्टडाउन</span>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-xs font-semibold" data-i18n="orderClosing">
+                    अर्डर बन्द हुने समय
+                  </span>
+                </div>
+
+                <!-- 4 Countdown Timer Blocks -->
+                <div class="grid grid-cols-4 gap-2 text-center my-space-sm" id="countdown-clock">
+                  <div class="p-3 bg-surface-container rounded-2xl flex flex-col items-center">
+                    <span class="font-headline-lg text-2xl sm:text-3xl font-extrabold text-on-surface" id="timer-days">०२</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase mt-0.5" data-i18n="days">दिन</span>
+                  </div>
+                  <div class="p-3 bg-surface-container rounded-2xl flex flex-col items-center">
+                    <span class="font-headline-lg text-2xl sm:text-3xl font-extrabold text-on-surface" id="timer-hours">०४</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase mt-0.5" data-i18n="hours">घण्टा</span>
+                  </div>
+                  <div class="p-3 bg-surface-container rounded-2xl flex flex-col items-center">
+                    <span class="font-headline-lg text-2xl sm:text-3xl font-extrabold text-on-surface" id="timer-mins">१८</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase mt-0.5" data-i18n="minutes">मिनेट</span>
+                  </div>
+                  <div class="p-3 bg-surface-container rounded-2xl flex flex-col items-center">
+                    <span class="font-headline-lg text-2xl sm:text-3xl font-extrabold text-secondary" id="timer-secs">४२</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant uppercase mt-0.5" data-i18n="seconds">सेकेन्ड</span>
+                  </div>
+                </div>
+
+                <!-- Timings Box -->
+                <div class="mt-space-md p-space-md rounded-2xl bg-surface-container-low flex flex-col gap-2.5">
+                  <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-secondary text-[22px] mt-0.5">alarm</span>
+                    <div>
+                      <p class="font-label-lg font-bold text-on-surface text-sm">आइतबार राति ८:०० बजे अर्डर बन्द</p>
+                      <p class="font-body-sm text-xs text-on-surface-variant">किसानहरूले सोमबार बिहानै आवश्यकता अनुसार मात्र टिप्नुहुनेछ।</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3 pt-1 border-t border-surface-container">
+                    <span class="material-symbols-outlined text-primary text-[22px] mt-0.5">local_shipping</span>
+                    <div>
+                      <p class="font-label-lg font-bold text-on-surface text-sm">घरदैलो डेलिभरी: बुधबार बिहान ७:०० - ११:०० बजे</p>
+                      <p class="font-body-sm text-xs text-on-surface-variant">तपाईंको अपार्टमेन्ट / समाजको मुख्य ढोकामा ताजा जुटको झोलामा।</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Special Offer Banner -->
+                <div onclick="switchRole('browse')" class="mt-space-md flex items-center justify-between p-3 rounded-xl bg-primary-fixed/40 text-on-primary-fixed-variant font-label-md text-xs cursor-pointer hover:bg-primary-fixed/60 transition-colors">
+                  <span class="flex items-center gap-1.5 font-semibold">
+                    <span class="material-symbols-outlined text-[18px] text-primary">psychiatry</span>
+                    <span>यो साताको विशेष: मुडेको ताजा रातो आलु र पालुङ्गो</span>
+                  </span>
+                  <span class="font-bold underline">हेर्नुहोस् →</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Community Impact Bar: 4 Metric Cards -->
+      <section class="w-full py-8 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
+            
+            <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex items-center gap-space-md border border-primary/5">
+              <div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-[30px]">group</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline-lg text-2xl font-bold text-on-surface">४५०+</span>
+                  <span class="font-label-sm text-xs text-primary font-semibold">परिवार</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant truncate">काठमाडौँ उपत्यकामा जोडिएका</p>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex items-center gap-space-md border border-primary/5">
+              <div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-[30px]">agriculture</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline-lg text-2xl font-bold text-on-surface">२८</span>
+                  <span class="font-label-sm text-xs text-secondary font-semibold">किसान</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant truncate">काभ्रे, धादिङ, सिन्धुपाल्चोक</p>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex items-center gap-space-md border border-primary/5">
+              <div class="w-14 h-14 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-[30px]">compost</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline-lg text-2xl font-bold text-on-surface">०%</span>
+                  <span class="font-label-sm text-xs text-primary font-semibold">फोहोर</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant truncate">माग अनुसार मात्र टिपाइ (Zero Waste)</p>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex items-center gap-space-md border border-primary/5">
+              <div class="w-14 h-14 rounded-2xl bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-[30px]">receipt_long</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline-lg text-2xl font-bold text-on-surface">रु. ३.४L+</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant truncate">सिधै किसानलाई मासिक भुक्तानी</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Produce Quick Pick Section -->
+      <section class="w-full py-8 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop">
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-space-lg">
+            <div>
+              <h2 class="font-headline-lg text-2xl sm:text-3xl font-bold text-on-surface">यो साताका ताजा उत्पादनहरू (Featured Produce)</h2>
+              <p class="font-body-sm text-sm text-on-surface-variant">काभ्रे, धादिङ र मुडेका बारीबाट अर्डर लगत्तै टिपेर सिधै पठाइनेछ।</p>
+            </div>
+            
+            <button onclick="switchRole('browse')" class="inline-flex items-center gap-1 text-primary font-bold hover:underline">
+              <span>सबै हेर्नुहोस् (View All 12 Harvests)</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- Quick Preview Produce Grid (Top 4 items) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
+            
+            <!-- Quick Item 1: गोलभेंडा -->
+            <article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all flex flex-col justify-between border border-primary/5">
+              <div>
+                <div class="relative h-48 w-full overflow-hidden bg-surface-container">
+                  <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSeJD88_SQV9DL448dL8kh7H1Z468OK6Ns9-dgSuKk6ytg4i3HFd33QtjyFum8g9rIzAps5g1gLJHSOm7v1L6N7SV_vcKTus12H-bVs3aMhvF4Phj1O0nJfHOf4j1UKviF_Qpd1gt1Rglj12A7O2n0OqcE_VCEQxBjp9GLPw6nJ5yM45EwhVSV-M5_RkAfW_cWrQ4lgkx78PutEtCm2SnzcBJ5LmR43TK0Glxni_kOS3vdR5InKSeX4w" alt="गोलभेंडा"/>
+                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-bold">काभ्रे बनेपा Direct</span>
+                  <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-sm text-xs font-semibold">टिपेको १८ घण्टा</span>
+                </div>
+                <div class="p-space-md flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-sm text-xs text-primary font-semibold">१००% प्राकृतिक (Chemical Free)</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant">१ केजी प्याक</span>
+                  </div>
+                  <h3 class="font-headline-sm text-lg font-bold text-on-surface">गोलभेंडा (Local Hybrid Tomato)</h3>
+                  <div class="flex items-center gap-1.5 text-xs text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[15px] text-primary">person</span>
+                    <span>किसान: <strong>राम बहादुर श्रेष्ठ</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-space-md pt-0 flex items-center justify-between">
+                <div>
+                  <span class="font-headline-sm text-lg font-bold text-primary">रु. ६५</span>
+                  <span class="text-xs text-outline">/के.जी.</span>
+                </div>
+                <button onclick="addToCart(1, 1)" class="px-3.5 py-2 rounded-full bg-primary text-white font-label-md text-xs font-semibold flex items-center gap-1 shadow-xs hover:bg-primary-container transition-all active:scale-95">
+                  <span class="material-symbols-outlined text-[16px]">shopping_basket</span>
+                  <span>थप्नुहोस्</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Quick Item 2: रायोको साग -->
+            <article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all flex flex-col justify-between border border-primary/5">
+              <div>
+                <div class="relative h-48 w-full overflow-hidden bg-surface-container">
+                  <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC7WQwSMfQBH6OYFo5mUwKwZ4Ic8J9JTUQ1iosOz58ZaBqP59mkmDW6Wp7koEtvjR_icbT25LeUjXX-9civ2OILgEowniNqk8tyab02wwj6GWQMGP78Kq8QkCuvamulfI8FOO3CcnqTyRrpE0Ej07REmOd8OfD8FU52TXNiwaTzBSqNC-KKRMdIpo10ZpvMx0mVcvVupJ0uXwPrjrSAFVK2khF7XS-Hb-f3_vI-8tPeDQRVqw5eRYbrw" alt="रायोको साग"/>
+                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-xs font-bold">धादिङ बैंसी Direct</span>
+                  <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-sm text-xs font-semibold">जैविक प्रमाणित</span>
+                </div>
+                <div class="p-space-md flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-sm text-xs text-primary font-semibold">बिहानको ताजा टिपाइ</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant">५०० ग्राम मुठा</span>
+                  </div>
+                  <h3 class="font-headline-sm text-lg font-bold text-on-surface">रायोको साग (Broadleaf Mustard)</h3>
+                  <div class="flex items-center gap-1.5 text-xs text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[15px] text-primary">person</span>
+                    <span>किसान: <strong>शान्ती प्रजापति</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-space-md pt-0 flex items-center justify-between">
+                <div>
+                  <span class="font-headline-sm text-lg font-bold text-primary">रु. ५०</span>
+                  <span class="text-xs text-outline">/मुठा</span>
+                </div>
+                <button onclick="addToCart(2, 1)" class="px-3.5 py-2 rounded-full bg-primary text-white font-label-md text-xs font-semibold flex items-center gap-1 shadow-xs hover:bg-primary-container transition-all active:scale-95">
+                  <span class="material-symbols-outlined text-[16px]">shopping_basket</span>
+                  <span>थप्नुहोस्</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Quick Item 3: मुडेको रातो आलु -->
+            <article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all flex flex-col justify-between border border-primary/5">
+              <div>
+                <div class="relative h-48 w-full overflow-hidden bg-surface-container">
+                  <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOPc9sZW79K5DlagHsLVoxG_3RoXVtALhI4leZFORrwVMuzs7YYCsnqfXbHX_dQihYNxLbQpIo7HG6lCJg3QcNQMlNjKzTs1M8WYPphn4k57XGT9-J9K2zxJVV3ZR9dUDZydehn6-6ArQBuipnRaa5oXzWb8NouP4KSM3RD8lGhGm0lAG6oVcs3syamBy7pbZAUhTAa-u-0ZRl4IPWQERVwOtHp6VCzgGMfOPzRiMBz6WA6r9UPbYU6A" alt="मुडेको रातो आलु"/>
+                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-xs font-bold">मुडे उच्च पहाड</span>
+                  <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-sm text-xs font-semibold">रैथाने बीउ</span>
+                </div>
+                <div class="p-space-md flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-sm text-xs text-primary font-semibold">२४०० मिटरको चिसो हावापानी</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant">१ केजी प्याक</span>
+                  </div>
+                  <h3 class="font-headline-sm text-lg font-bold text-on-surface">मुडेको रातो आलु (Alpine Potato)</h3>
+                  <div class="flex items-center gap-1.5 text-xs text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[15px] text-primary">person</span>
+                    <span>किसान: <strong>दावा शेर्पा</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-space-md pt-0 flex items-center justify-between">
+                <div>
+                  <span class="font-headline-sm text-lg font-bold text-primary">रु. ११०</span>
+                  <span class="text-xs text-outline">/के.जी.</span>
+                </div>
+                <button onclick="addToCart(3, 1)" class="px-3.5 py-2 rounded-full bg-primary text-white font-label-md text-xs font-semibold flex items-center gap-1 shadow-xs hover:bg-primary-container transition-all active:scale-95">
+                  <span class="material-symbols-outlined text-[16px]">shopping_basket</span>
+                  <span>थप्नुहोस्</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Quick Item 4: धादिङे सिमि -->
+            <article class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all flex flex-col justify-between border border-primary/5">
+              <div>
+                <div class="relative h-48 w-full overflow-hidden bg-surface-container">
+                  <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKz42oFFq_aCm58kApRTyRduCH8ACH5mEpogXrwUtO-djGAgF0hcQ8_yunBNlAYSv1Er9I3jF3yy0Et9nZzEUxyEQW-ZQ3MdwI25CXYK0eYKdAckLDp__Ylr2AbEhdpkZtmGGfI_leU7_m904sI6VBz9Ru7HcmWIYCtrVMLv6ywLw0NQwaLMKd4nglGJ03NM3XV2TST3DoROZ1Y59qwqcONIebI8BOf0nigVOQSK368ny1E_2bptNW4w" alt="धादिङे सिमि"/>
+                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-xs font-bold">धादिङ त्रिशुली</span>
+                  <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-sm text-xs font-semibold">आजै टिपिएको</span>
+                </div>
+                <div class="p-space-md flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-sm text-xs text-primary font-semibold">त्रिशुली किनारको मलिलो पाखा</span>
+                    <span class="font-label-sm text-xs text-on-surface-variant">१ केजी प्याक</span>
+                  </div>
+                  <h3 class="font-headline-sm text-lg font-bold text-on-surface">धादिङे हरियो सिमि (Green Beans)</h3>
+                  <div class="flex items-center gap-1.5 text-xs text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[15px] text-primary">person</span>
+                    <span>किसान: <strong>हरि बहादुर थापा</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-space-md pt-0 flex items-center justify-between">
+                <div>
+                  <span class="font-headline-sm text-lg font-bold text-primary">रु. ९५</span>
+                  <span class="text-xs text-outline">/के.जी.</span>
+                </div>
+                <button onclick="addToCart(4, 1)" class="px-3.5 py-2 rounded-full bg-primary text-white font-label-md text-xs font-semibold flex items-center gap-1 shadow-xs hover:bg-primary-container transition-all active:scale-95">
+                  <span class="material-symbols-outlined text-[16px]">shopping_basket</span>
+                  <span>थप्नुहोस्</span>
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Farm-to-Community 4-Step Cycle Visual (How It Works) -->
+      <section class="w-full py-12 bg-surface-container-low border-y border-primary/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop">
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <span class="font-label-sm text-xs text-primary font-bold uppercase tracking-wider">पारदर्शी वितरण चक्र</span>
+            <h2 class="font-headline-lg text-2xl sm:text-3xl font-extrabold text-on-surface mt-1">हाम्रो विधि: बारीबाट सीधै तपाईंको घरसम्म</h2>
+            <p class="font-body-sm text-sm text-on-surface-variant mt-2">कुनै बिचौलिया बिना किसानलाई उचित मूल्य र तपाईंलाई १००% ताजा तरकारी।</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+            
+            <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm flex flex-col items-center text-center relative border border-primary/5">
+              <span class="w-9 h-9 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-sm mb-3">१</span>
+              <span class="material-symbols-outlined text-[36px] text-primary mb-2">shopping_cart</span>
+              <h3 class="font-headline-sm font-bold text-base text-on-surface">१. आइतबार अग्रिम अर्डर</h3>
+              <p class="font-body-sm text-xs text-on-surface-variant mt-1">परिवारहरूले आफूलाई चाहिने मात्रा मात्र अर्डर गर्नुहुन्छ, जसले शून्य फोहोर सुनिश्चित गर्छ।</p>
+            </div>
+
+            <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm flex flex-col items-center text-center relative border border-primary/5">
+              <span class="w-9 h-9 rounded-full bg-secondary-fixed text-secondary font-bold flex items-center justify-center text-sm mb-3">२</span>
+              <span class="material-symbols-outlined text-[36px] text-secondary mb-2">nature_people</span>
+              <h3 class="font-headline-sm font-bold text-base text-on-surface">२. सोमबार बारीमै टिपाइ</h3>
+              <p class="font-body-sm text-xs text-on-surface-variant mt-1">काभ्रे र धादिङका किसानले माग अनुसार मात्र बिहानै शीतले भिजेको तरकारी टिप्नुहुन्छ।</p>
+            </div>
+
+            <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm flex flex-col items-center text-center relative border border-primary/5">
+              <span class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container font-bold flex items-center justify-center text-sm mb-3">३</span>
+              <span class="material-symbols-outlined text-[36px] text-primary mb-2">local_shipping</span>
+              <h3 class="font-headline-sm font-bold text-base text-on-surface">३. मंगलबार हबमा ग्रेडिङ</h3>
+              <p class="font-body-sm text-xs text-on-surface-variant mt-1">ललितपुरको केन्द्रीय हबमा गुणस्तर जाँच गरी वातावरणमैत्री जुटको झोलामा प्याक गरिन्छ।</p>
+            </div>
+
+            <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm flex flex-col items-center text-center relative border border-primary/5">
+              <span class="w-9 h-9 rounded-full bg-tertiary-fixed text-tertiary font-bold flex items-center justify-center text-sm mb-3">४</span>
+              <span class="material-symbols-outlined text-[36px] text-tertiary mb-2">door_front</span>
+              <h3 class="font-headline-sm font-bold text-base text-on-surface">४. बुधबार बिहान डेलिभरी</h3>
+              <p class="font-body-sm text-xs text-on-surface-variant mt-1">बिहान ७ देखि १० बजेभित्र तपाईंको आवासीय क्लस्टरमा निःशुल्क डेलिभरी।</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         VIEW 2: BROWSE PRODUCE CATALOG (ताजा तरकारी तथा फलफूल)
+         ========================================================================== -->
+    <main id="view-browse" class="w-full flex flex-col hidden py-6">
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop w-full">
+        
+        <!-- Breadcrumb & Announcement Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+            <button onclick="switchRole('home')" class="hover:text-primary transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px]">home</span>
+              <span>गृह (Home)</span>
+            </button>
+            <span>/</span>
+            <span class="text-primary font-bold">ताजा तरकारी तथा फलफूल क्याटलग</span>
+          </div>
+
+          <div class="inline-flex items-center gap-2 bg-surface-container-high px-3.5 py-1.5 rounded-full text-xs shadow-xs">
+            <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
+            <span>अर्को डेलिभरी साइकल: <strong class="text-primary">बुधबार बिहान ७:०० - १०:००</strong></span>
+          </div>
+        </div>
+
+        <!-- 2-Column Responsive Layout -->
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+          
+          <!-- Mobile Filter Toggle Button -->
+          <div class="w-full lg:hidden flex items-center justify-between bg-surface-container-lowest p-3 rounded-2xl shadow-xs border border-primary/10">
+            <button onclick="toggleMobileFilters()" class="flex-1 flex items-center justify-between text-xs font-bold text-primary">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">tune</span>
+                <span>फिल्टर तथा खोज्नुहोस् (Filters & Search)</span>
+              </span>
+              <span id="mobile-filter-chevron" class="material-symbols-outlined text-[20px]">expand_more</span>
+            </button>
+          </div>
+
+          <!-- LEFT SIDEBAR FILTERS (320px) -->
+          <aside id="catalog-filters-aside" class="hidden lg:flex w-full lg:w-80 shrink-0 flex-col gap-4 bg-surface-container-lowest p-5 rounded-2xl shadow-sm border border-primary/5">
+            
+            <div class="flex items-center justify-between pb-2 border-b border-surface-container">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+                <span class="font-headline-sm font-bold text-base text-on-surface">फिल्टरहरू (Filters)</span>
+              </div>
+              <button onclick="resetFilters()" class="text-xs text-secondary hover:text-primary transition-colors font-bold">सबै मेटाउनुहोस्</button>
+            </div>
+
+            <!-- Search Bar with Voice Trigger -->
+            <div class="flex flex-col gap-1.5">
+              <label class="font-label-sm text-xs text-on-surface-variant font-semibold">तरकारी वा फलफूल खोज्नुहोस्</label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3 text-outline text-[18px]">search</span>
+                <input id="catalog-search-input" class="w-full h-11 pl-9 pr-14 bg-surface-container-low rounded-xl text-xs text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 shadow-inner" placeholder="खोज्नुहोस् (उदा: गोलभेंडा, आलु)..." type="text"/>
+                <button onclick="openVoiceSearchModal()" class="absolute right-2 w-7 h-7 flex items-center justify-center rounded-lg bg-primary-fixed text-on-primary-fixed-variant hover:bg-primary hover:text-on-primary transition-colors" title="आवाजबाट खोज्नुहोस् (Voice Search)">
+                  <span class="material-symbols-outlined text-[15px]">mic</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Sourcing Districts Checkboxes -->
+            <div class="flex flex-col gap-2 pt-2">
+              <div class="flex items-center justify-between">
+                <span class="font-label-lg font-bold text-sm text-on-surface">उत्पादन जिल्ला (Districts)</span>
+                <span class="text-xs text-outline">६ क्षेत्र</span>
+              </div>
+
+              <div class="flex flex-col gap-1 text-xs">
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('kavre', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>काभ्रेपलाञ्चोक (पाँचखाल)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">४</span>
+                </label>
+
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('dhading', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>धादिङ (बेनीघाट रोराङ)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">२</span>
+                </label>
+
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('sindhupalchok', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>सिन्धुपाल्चोक (मुडे उच्च पहाड)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">१</span>
+                </label>
+
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('bhaktapur', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>भक्तपुर (चाँगुनारायण)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">१</span>
+                </label>
+
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('syangja', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>स्याङ्जा (सुन्तला पकेट)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">१</span>
+                </label>
+
+                <label class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" checked onchange="toggleDistrictFilter('kathmandu', this.checked)" class="district-checkbox w-4 h-4 accent-primary rounded cursor-pointer"/>
+                    <span>काठमाडौँ (कीर्तिपुर ज्यापु क्लस्टर)</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">१</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Price Filter Slider -->
+            <div class="flex flex-col gap-2 pt-2 border-t border-surface-container">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-on-surface">अधिकतम मूल्य (Max Price)</span>
+                <span id="price-slider-label" class="font-bold text-primary">रु. २००</span>
+              </div>
+              <input type="range" min="40" max="200" value="200" step="10" oninput="state.filters.maxPrice = parseInt(this.value); document.getElementById('price-slider-label').textContent = 'रु. ' + this.value; renderBrowseCatalog();" class="accent-primary cursor-pointer"/>
+            </div>
+
+          </aside>
+
+          <!-- RIGHT MAIN CATALOG AREA -->
+          <div class="flex-1 flex flex-col gap-4 w-full">
+            
+            <!-- Category Navigation Tabs & Sorter Header -->
+            <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-primary/5 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+                <button onclick="setCatalogCategory('all')" data-cat="all" class="catalog-cat-btn px-4 py-2 rounded-full font-label-md text-xs sm:text-sm transition-all shrink-0 bg-primary text-on-primary shadow-sm font-semibold">सबै (All)</button>
+                <button onclick="setCatalogCategory('greens')" data-cat="greens" class="catalog-cat-btn px-4 py-2 rounded-full font-label-md text-xs sm:text-sm transition-all shrink-0 bg-surface-container text-on-surface hover:bg-surface-container-high">हरियो सागपात (Leafy Greens)</button>
+                <button onclick="setCatalogCategory('veggies')" data-cat="veggies" class="catalog-cat-btn px-4 py-2 rounded-full font-label-md text-xs sm:text-sm transition-all shrink-0 bg-surface-container text-on-surface hover:bg-surface-container-high">ताजा तरकारी (Veggies)</button>
+                <button onclick="setCatalogCategory('roots')" data-cat="roots" class="catalog-cat-btn px-4 py-2 rounded-full font-label-md text-xs sm:text-sm transition-all shrink-0 bg-surface-container text-on-surface hover:bg-surface-container-high">जरा र आलु (Roots)</button>
+                <button onclick="setCatalogCategory('fruits')" data-cat="fruits" class="catalog-cat-btn px-4 py-2 rounded-full font-label-md text-xs sm:text-sm transition-all shrink-0 bg-surface-container text-on-surface hover:bg-surface-container-high">फलफूल (Fruits)</button>
+              </div>
+
+              <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                <span id="browse-result-count" class="font-bold text-primary">८ उत्पादनहरू</span>
+                <span>• क्रमबद्ध:</span>
+                <select onchange="state.filters.sortBy = this.value; renderBrowseCatalog();" class="bg-surface-container-low px-2.5 py-1.5 rounded-lg text-xs font-semibold focus:outline-none">
+                  <option value="popular">धेरै रुचाइएका (Popular)</option>
+                  <option value="price-low">मूल्य: कम देखि बढी</option>
+                  <option value="price-high">मूल्य: बढी देखि कम</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dynamic Produce Grid Container -->
+            <div id="browse-produce-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <!-- Rendered reactively by app.js -->
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ==========================================================================
+         VIEW 3: CART & PRE-ORDER CHECKOUT (झोला र अग्रिम अर्डर)
+         ========================================================================== -->
+    <main id="view-cart" class="w-full flex flex-col hidden py-6">
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop w-full">
+        
+        <!-- Top Delivery Alert -->
+        <div class="w-full mb-6 rounded-2xl bg-surface-container-high p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 border border-primary/10">
+          <div class="flex items-center gap-3 text-on-surface">
+            <div class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[22px]">local_shipping</span>
+            </div>
+            <div>
+              <span class="font-headline-sm text-base font-bold text-primary block">बुधबारको डेलिभरीका लागि प्रि-अर्डर (ताजा संकलन)</span>
+              <span class="text-xs text-on-surface-variant font-medium">आइतबार राति ८:०० बजेसम्म संशोधन वा रद्द गर्न सकिने</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 self-start md:self-auto text-xs font-bold text-secondary bg-secondary-fixed px-3 py-1.5 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span>अर्डर बुकिङ खुला छ (समय बाँकी: २६ घण्टा)</span>
+          </div>
+        </div>
+
+        <!-- Empty Cart Display -->
+        <div id="cart-empty-state" class="hidden col-span-full py-16 text-center bg-surface-container-lowest rounded-3xl shadow-sm p-8 max-w-xl mx-auto border border-primary/5">
+          <div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center mx-auto mb-4 text-outline">
+            <span class="material-symbols-outlined text-[40px]">shopping_basket</span>
+          </div>
+          <h2 class="font-headline-md text-xl font-bold text-on-surface" data-i18n="emptyCartTitle">तपाईंको झोला खाली छ</h2>
+          <p class="font-body-sm text-sm text-on-surface-variant mt-1" data-i18n="emptyCartDesc">बारीबाट ताजा तरकारी छानेर झोलामा राख्नुहोस्।</p>
+          <button onclick="switchRole('browse')" class="mt-6 px-6 py-3 rounded-full bg-primary text-white font-bold text-sm shadow-md hover:bg-primary-container transition-all">
+            ताजा क्याटलग हेर्नुहोस् (Browse Produce)
+          </button>
+        </div>
+
+        <!-- Filled Cart Main 2-Column Layout -->
+        <div id="cart-filled-layout" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- LEFT COLUMN: Basket Items (Col-span 7) -->
+          <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-primary/5">
+              <div class="flex items-center justify-between pb-4 border-b border-surface-container">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[26px]">shopping_bag</span>
+                  <h2 class="font-headline-md text-xl font-bold text-on-surface">झोलाका ताजा तरकारीहरू</h2>
+                  <span id="cart-items-count-badge" class="ml-2 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-bold">३ आइटम</span>
+                </div>
+                <button onclick="clearCart()" class="text-tertiary hover:text-tertiary-container text-xs font-bold flex items-center gap-1 transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+                  <span>सबै हटाउनुहोस्</span>
+                </button>
+              </div>
+
+              <!-- Items List (Reactive) -->
+              <div id="cart-items-list" class="flex flex-col gap-3 pt-4">
+                <!-- Injected via renderCartView() -->
+              </div>
+            </div>
+
+            <!-- Delivery Preferences Card -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
+              <h3 class="font-headline-sm text-base font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+                <span>डेलिभरी प्राथमिकता (Delivery Preferences)</span>
+              </h3>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="p-3.5 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3 cursor-pointer">
+                  <input type="radio" name="delivery-loc" checked onchange="state.deliveryType = 'hub'; renderCartView();" class="mt-1 accent-primary"/>
+                  <div class="flex flex-col text-xs">
+                    <span class="font-bold text-sm text-on-surface">सोसाइटी हब संकलन (Pickup Hub)</span>
+                    <span class="text-primary font-semibold mt-0.5">निःशुल्क (Free) • हब काउन्टर</span>
+                    <span class="text-on-surface-variant mt-1">तपाईंको अपार्टमेन्ट परिसरको तोकिएको केन्द्रमा।</span>
+                  </div>
+                </label>
+
+                <label class="p-3.5 rounded-xl border border-surface-container-high bg-surface-container-low flex items-start gap-3 cursor-pointer">
+                  <input type="radio" name="delivery-loc" onchange="state.deliveryType = 'doorstep'; renderCartView();" class="mt-1 accent-primary"/>
+                  <div class="flex flex-col text-xs">
+                    <span class="font-bold text-sm text-on-surface">फ्ल्याटको ढोकामै (Doorstep)</span>
+                    <span class="text-secondary font-semibold mt-0.5">+ रु. ५० थप डेलिभरी शुल्क</span>
+                    <span class="text-on-surface-variant mt-1">तपाईंको अपार्टमेन्ट / घरको मूल ढोकामै।</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Zero waste Packaging Notice -->
+              <div class="p-3 bg-secondary-fixed/30 rounded-xl flex items-center gap-3 text-xs text-on-secondary-fixed-variant">
+                <span class="material-symbols-outlined text-secondary text-[24px] shrink-0">recycling</span>
+                <span><strong>शून्य-फोहोर जुटको झोला:</strong> तपाईंको अर्डर परम्परागत नेपाली जुटको झोलामा आउँछ। अर्को अर्डरमा झोला फिर्ता गर्दा रु. ३० धरौटी स्वतः फिर्ता हुनेछ।</span>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- RIGHT COLUMN: Order Summary & Checkout (Col-span 5) -->
+          <section class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-md border border-primary/5 flex flex-col gap-4">
+              <h3 class="font-headline-md text-lg font-bold text-on-surface pb-3 border-b border-surface-container">अर्डर सारांश (Order Summary)</h3>
+
+              <!-- Price Breakdown -->
+              <div class="flex flex-col gap-2.5 text-sm">
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>उप-कुल (Items Subtotal):</span>
+                  <span id="summary-subtotal" class="font-bold text-on-surface">रु. २२५</span>
+                </div>
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>सोसाइटी डेलिभरी:</span>
+                  <span id="summary-delivery" class="font-semibold text-primary">निःशुल्क (हब डेलिभरी)</span>
+                </div>
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>जुट झोला धरौटी (फिर्ता हुने):</span>
+                  <span id="summary-packaging" class="font-medium text-on-surface">रु. ३०</span>
+                </div>
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>कुपन छुट (Discount):</span>
+                  <span id="summary-discount" class="font-bold text-primary">रु. ०</span>
+                </div>
+                <div class="pt-3 border-t border-surface-container flex items-center justify-between text-base">
+                  <span class="font-extrabold text-on-surface">कुल भुक्तानी रकम:</span>
+                  <span id="summary-grand-total" class="font-extrabold text-2xl text-primary">रु. २५५</span>
+                </div>
+              </div>
+
+              <!-- Coupon Strip -->
+              <div class="pt-2 flex items-center gap-2">
+                <input id="coupon-input" type="text" placeholder="कुपन कोड (HAMROEARTH)" class="flex-1 px-3 py-2 rounded-xl bg-surface-container-low text-xs uppercase focus:outline-none focus:ring-1 focus:ring-primary"/>
+                <button onclick="applyCoupon()" class="px-3.5 py-2 rounded-xl bg-primary-fixed text-on-primary-fixed-variant text-xs font-bold hover:bg-primary hover:text-white transition-colors">लागु गर्नुहोस्</button>
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="flex flex-col gap-2 pt-2 border-t border-surface-container">
+                <span class="font-label-sm text-xs font-bold text-on-surface">भुक्तानी माध्यम (Payment Method):</span>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <label class="p-2 rounded-xl border border-primary/20 bg-primary/5 flex flex-col items-center text-center cursor-pointer">
+                    <input type="radio" name="pay-method" checked class="accent-primary mb-1"/>
+                    <span class="font-bold text-primary">eSewa</span>
+                  </label>
+                  <label class="p-2 rounded-xl border border-surface-container bg-surface-container-low flex flex-col items-center text-center cursor-pointer">
+                    <input type="radio" name="pay-method" class="accent-primary mb-1"/>
+                    <span class="font-bold text-secondary">Khalti</span>
+                  </label>
+                  <label class="p-2 rounded-xl border border-surface-container bg-surface-container-low flex flex-col items-center text-center cursor-pointer">
+                    <input type="radio" name="pay-method" class="accent-primary mb-1"/>
+                    <span class="font-bold text-on-surface">डेलिभरीमा नगद</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Big Checkout CTA -->
+              <button onclick="submitPreorder()" class="w-full py-4 rounded-full bg-primary text-on-primary font-label-lg text-base font-extrabold shadow-xl hover:bg-primary-container hover:shadow-2xl hover:translate-y-[-1px] active:scale-95 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[22px]">check_circle</span>
+                <span data-i18n="confirmPreorder">अर्डर निश्चित गर्नुहोस् (Confirm Pre-order)</span>
+              </button>
+
+              <span class="text-center text-[11px] text-on-surface-variant flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-[14px] text-primary">verified_user</span>
+                <span>१००% सुरक्षित भुक्तानी • विषादीरहित अर्गानिक ग्यारेन्टी</span>
+              </span>
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ==========================================================================
+         VIEW 4: FARMER VOICE PORTAL & HARVEST INVENTORY (किसान पोर्टल)
+         ========================================================================== -->
+    <main id="view-farmer" class="w-full flex flex-col hidden py-6">
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop w-full">
+        
+        <!-- Top Agricultural Notification Bar & Live Coordinator Assistance -->
+        <div class="relative w-full rounded-2xl bg-surface-container-lowest p-6 shadow-sm mb-6 overflow-hidden border border-primary/5">
+          <div class="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+            
+            <!-- Farmer Profile Identification -->
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <div class="w-18 h-18 rounded-2xl bg-primary-container/10 flex items-center justify-center overflow-hidden shadow-inner">
+                  <img class="w-16 h-16 rounded-2xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5RM7mUXIywBppFbXEfyTtSEV99r54KnUrnI5LGR5nEr5H-4C_Oiufx8WAscbk7AuWggizGKz5pwfV7RZbAYKDeFxOCk-CPVyAkNV_l4WY_NLxkDysxGkPa5zVNUowCklCjU3pyIzIGia99_pQdTrGHFHtvyA3IDJZVi9TmfGmnL1Uv3kZ7T4TUdcFqL98xlRAeLqV756v0W8eUjwS9cnVqrHSTx6xwL8FBVuWEpX5GP3DpgFbOciDIw" alt="Farmer Profile"/>
+                </div>
+                <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary text-xs shadow-md">
+                  <span class="material-symbols-outlined text-[16px]">verified</span>
+                </span>
+              </div>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h1 class="font-headline-md text-xl font-bold text-on-surface">राम बहादुर श्रेष्ठ</h1>
+                  <span class="bg-primary-fixed text-on-primary-fixed-variant px-2.5 py-0.5 rounded-full font-label-sm text-xs flex items-center gap-1 font-bold">
+                    <span class="material-symbols-outlined text-[14px]">eco</span>
+                    <span>प्रमाणित जैविक किसान (Verified Organic)</span>
+                  </span>
+                  <span class="bg-surface-container text-on-surface-variant px-2.5 py-0.5 rounded-full font-label-sm text-xs">
+                    पाँचखाल, काभ्रे (वडा नं. ३)
+                  </span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant flex items-center gap-2 mt-1">
+                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                  <span>सक्रिय सत्र: आजको संकलन केन्द्र खुला छ (हप्ता #४२ चक्र)</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Audio Help & Direct Coordinator Call -->
+            <div class="flex items-center gap-3 flex-wrap">
+              <button onclick="playFarmerAudioGreeting()" class="flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface px-4 py-2 rounded-full transition-all">
+                <span class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">volume_up</span>
+                </span>
+                <span class="font-label-lg text-xs font-bold">निर्देशन सुन्नुहोस्</span>
+              </button>
+
+              <a href="tel:9801234567" class="flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full shadow-xs hover:brightness-105 transition-all">
+                <span class="material-symbols-outlined text-[20px]">phone_in_talk</span>
+                <div class="flex flex-col text-left text-xs">
+                  <span class="text-[10px] leading-tight">कृषि सहजकर्ता सुवास</span>
+                  <span class="font-bold">९८०१२३४५६७</span>
+                </div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Voice Simulator Tabs (State Switchers) -->
+        <div class="w-full flex items-center justify-between gap-1 p-1 bg-surface-container rounded-xl mb-6 overflow-x-auto">
+          <button id="tab-idle" onclick="setFarmerState('idle')" class="flex-1 py-2 px-2 rounded-lg text-center font-label-md text-xs sm:text-sm font-bold transition-all bg-surface-container-lowest text-primary shadow-sm">
+            १. तयार (Idle Mic)
+          </button>
+          <button id="tab-listening" onclick="setFarmerState('listening')" class="flex-1 py-2 px-2 rounded-lg text-center font-label-md text-xs sm:text-sm font-bold transition-all text-on-surface-variant hover:text-on-surface">
+            २. सुन्दैछ (Waveform Active)
+          </button>
+          <button id="tab-confirm" onclick="setFarmerState('confirm')" class="flex-1 py-2 px-2 rounded-lg text-center font-label-md text-xs sm:text-sm font-bold transition-all text-on-surface-variant hover:text-on-surface">
+            ३. नतिजा (Parsed Card)
+          </button>
+          <button id="tab-demand" onclick="setFarmerState('demand')" class="flex-1 py-2 px-2 rounded-lg text-center font-label-md text-xs sm:text-sm font-bold transition-all text-on-surface-variant hover:text-on-surface">
+            ४. नयाँ हब मागहरू
+          </button>
+        </div>
+
+        <!-- 2-COLUMN MAIN FARMER WORKSPACE -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- LEFT COLUMN: Voice Assistant Recording Station (Col-span 7) -->
+          <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- STATE 1: IDLE MIC WORKSPACE -->
+            <div id="farmer-display-idle" class="bg-surface-container-lowest rounded-2xl p-8 shadow-sm flex flex-col items-center text-center relative overflow-hidden border border-primary/5">
+              <div class="w-full flex justify-end mb-2">
+                <button onclick="playFarmerAudioGreeting()" class="flex items-center gap-1 px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-xs font-bold">
+                  <span class="material-symbols-outlined text-[16px]">volume_up</span>
+                  <span>सुन्नुहोस्</span>
+                </button>
+              </div>
+
+              <h2 class="font-headline-lg text-xl sm:text-2xl font-bold text-on-surface mb-1">बोलेर तरकारीको जानकारी दिनुहोस्</h2>
+              <p class="font-body-md text-sm text-on-surface-variant max-w-sm mb-6">
+                कुन तरकारी छ र कति केजी छ? हरियो बटन थिचेर सिधै बोल्नुहोस्।
+              </p>
+
+              <!-- Giant 124px Pulsating Mic Target -->
+              <div class="relative flex items-center justify-center my-4">
+                <div class="absolute w-44 h-44 rounded-full bg-primary/10 mic-ring-1 pointer-events-none"></div>
+                <div class="absolute w-52 h-52 rounded-full bg-primary/5 mic-ring-2 pointer-events-none"></div>
+                <button onclick="startFarmerListening()" class="relative z-10 w-32 h-32 rounded-full bg-primary text-on-primary shadow-2xl flex flex-col items-center justify-center active:scale-95 transition-all transform hover:scale-105 group">
+                  <span class="material-symbols-outlined text-[52px] leading-none mb-1 group-hover:scale-110 transition-transform">mic</span>
+                  <span class="font-label-sm text-xs font-extrabold tracking-wide">थिच्नुहोस्</span>
+                </button>
+              </div>
+
+              <div class="mt-4 px-4 py-2 rounded-full bg-surface-container-low flex items-center gap-2 text-xs text-on-surface-variant">
+                <span class="material-symbols-outlined text-[16px] text-primary">tips_and_updates</span>
+                <span>उदाहरण: <strong>"गोलभेंडा ५० केजी बिहीबारलाई छ"</strong></span>
+              </div>
+            </div>
+
+            <!-- STATE 2: LISTENING & ANIMATED SOUND WAVEFORM -->
+            <div id="farmer-display-listening" class="hidden bg-surface-container-lowest rounded-2xl p-8 shadow-md flex flex-col items-center text-center border-2 border-primary">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-md text-xs font-bold mb-4 animate-pulse">
+                <span class="w-2.5 h-2.5 rounded-full bg-error inline-block"></span>
+                <span>रेकर्ड हुँदैछ... बोलेको सुन्दैछ (Listening Active)</span>
+              </div>
+
+              <h2 class="font-headline-lg text-2xl font-bold text-primary mb-2">तपाईं बोलिरहनु भएको छ...</h2>
+              <p class="font-body-sm text-xs text-on-surface-variant mb-6">"गोलभेंडा पचास केजी बिहीबार बिहान संकलनको लागि..."</p>
+
+              <!-- Canvas Animated Waveform -->
+              <div class="w-full max-w-md h-20 bg-surface-container-low rounded-2xl flex items-center justify-center p-2 mb-6">
+                <canvas id="waveform-canvas" class="w-full h-full"></canvas>
+              </div>
+
+              <button onclick="setFarmerState('confirm')" class="px-6 py-3 rounded-full bg-primary text-white font-bold text-xs shadow-md hover:bg-primary-container transition-all">
+                बोलेर सकियो (Finish Speaking)
+              </button>
+            </div>
+
+            <!-- STATE 3: PARSED CROP CONFIRMATION CARD -->
+            <div id="farmer-section-confirm" class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm flex flex-col gap-4 border border-primary/10">
+              <div class="flex items-center justify-between pb-3 border-b border-surface-container">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[22px]">verified</span>
+                  <h3 class="font-headline-sm text-base font-bold text-on-surface">भ्वाइस पहिचान नतिजा (Recognized Batch)</h3>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-bold">१००% पुष्टि</span>
+              </div>
+
+              <div class="p-4 rounded-xl bg-surface-container-low flex flex-col sm:flex-row items-center gap-4 justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-14 h-14 rounded-xl bg-primary-container text-white flex items-center justify-center font-bold text-xl">
+                    🍅
+                  </div>
+                  <div class="flex flex-col text-xs">
+                    <span class="font-headline-sm font-bold text-sm text-on-surface">गोलभेंडा (Local Hybrid Tomato)</span>
+                    <span class="text-on-surface-variant">तौल: <strong class="text-primary text-sm">५० केजी</strong> • ग्रेड: Grade A (उत्कृष्ट)</span>
+                    <span class="text-on-surface-variant">तयार हुने समय: <strong>बिहीबार बिहान ७:०० बजे</strong></span>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <span class="text-[11px] text-on-surface-variant block">अनुमानित भुक्तानी</span>
+                  <span class="font-headline-md text-xl font-bold text-primary">रु. ३,२५०</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 pt-2">
+                <button onclick="confirmFarmerBatch()" class="flex-1 py-3.5 rounded-full bg-primary text-white font-label-md text-sm font-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">done</span>
+                  <span>संकलन सूचीमा दर्ता गर्नुहोस् (Confirm Batch)</span>
+                </button>
+                <button onclick="setFarmerState('idle')" class="px-4 py-3.5 rounded-full bg-surface-container text-on-surface text-xs font-bold hover:bg-surface-container-high transition-colors">
+                  पुनः बोल्नुहोस्
+                </button>
+              </div>
+            </div>
+
+            <!-- STATE 4: DEMAND LIST FROM SOCIETIES -->
+            <div id="farmer-section-demand" class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm flex flex-col gap-3 border border-primary/5">
+              <h3 class="font-headline-sm text-base font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary text-[20px]">trending_up</span>
+                <span>काठमाडौँ र ललितपुर सोसाइटीबाट तत्काल माग (Urgent Demands)</span>
+              </h3>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                  <div>
+                    <span class="font-bold text-sm text-on-surface block">पालुङ्गोको साग</span>
+                    <span class="text-secondary font-semibold">माग: १२० मुठा (हात्तीवन सोसाइटी)</span>
+                  </div>
+                  <button onclick="sfx.speak('पालुङ्गोको साग माग स्वीकार भयो'); showToast('माग स्वीकार भयो', 'पालुङ्गोको साग १२० मुठा', 'check');" class="px-3 py-1.5 rounded-full bg-secondary text-white font-bold text-xs">स्वीकार</button>
+                </div>
+
+                <div class="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                  <div>
+                    <span class="font-bold text-sm text-on-surface block">काउली</span>
+                    <span class="text-secondary font-semibold">माग: २०० केजी (सानेपा सोसाइटी)</span>
+                  </div>
+                  <button onclick="sfx.speak('काउली माग स्वीकार भयो'); showToast('माग स्वीकार भयो', 'काउली २०० केजी', 'check');" class="px-3 py-1.5 rounded-full bg-secondary text-white font-bold text-xs">स्वीकार</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: Farmer Payouts & Registered Batches (Col-span 5) -->
+          <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Earnings Summary Cards -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
+              <h3 class="font-headline-sm text-base font-bold text-on-surface flex items-center justify-between">
+                <span>आम्दानी र भुक्तानी स्थिति</span>
+                <span class="text-xs text-primary font-bold">कात्तिक चक्र</span>
+              </h3>
+
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="p-3.5 bg-surface-container-low rounded-xl flex flex-col">
+                  <div class="flex items-center gap-1 text-primary mb-1 font-bold">
+                    <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                    <span>जम्मा भइसकेको</span>
+                  </div>
+                  <span class="font-headline-md text-xl font-bold text-on-surface">रु. १२,४५०</span>
+                  <span class="text-[11px] text-on-surface-variant mt-0.5">गत हप्ताको बिक्री</span>
+                </div>
+
+                <div class="p-3.5 bg-surface-container-low rounded-xl flex flex-col">
+                  <div class="flex items-center gap-1 text-secondary mb-1 font-bold">
+                    <span class="material-symbols-outlined text-[16px]">pending</span>
+                    <span>आउन बाँकी</span>
+                  </div>
+                  <span class="font-headline-md text-xl font-bold text-on-surface">रु. ३,२५०</span>
+                  <span class="text-[11px] text-on-surface-variant mt-0.5">भोलि साँझसम्म</span>
+                </div>
+              </div>
+
+              <!-- Collection Van Live Tracker -->
+              <div class="p-3.5 bg-surface-container-low rounded-xl flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-sm text-on-surface">संकलन भ्यान (Collection Van)</span>
+                    <span class="text-on-surface-variant">आज बिहान ९:३० बजे पाँचखाल चोकमा</span>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-bold text-[11px]">बाटोमा छ</span>
+              </div>
+            </div>
+
+            <!-- Registered Batches List -->
+            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-3">
+              <h3 class="font-headline-sm text-base font-bold text-on-surface">मेरो बाली संकलन इतिहास</h3>
+              <div id="farmer-batches-list" class="flex flex-col gap-2.5">
+                <!-- Injected via renderFarmerBatches() -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ==========================================================================
+         VIEW 5: LOGISTICS & ADMIN DISPATCH CONSOLE (व्यवस्थापक कन्सोल)
+         ========================================================================== -->
+    <main id="view-admin" class="w-full flex flex-col hidden py-6">
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-margin-desktop w-full">
+        
+        <!-- Operational Cycle Alert / Executive Header Card -->
+        <div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm p-6 mb-6 border border-primary/5">
+          <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+            
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-3 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-xs font-bold">
+                  <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                  <span>सक्रिय आपूर्ति चक्र</span>
+                </span>
+                <span class="font-headline-sm text-lg font-bold text-on-surface">हप्ता #४२ (कात्तिक चक्र)</span>
+                <span class="text-outline-variant hidden sm:inline">•</span>
+                <span class="text-xs text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+                  <span>डेलिभरी: बुधबार बिहान ६:०० बजेबाट (Kathmandu &amp; Lalitpur Societies)</span>
+                </span>
+              </div>
+              <p class="text-xs text-on-surface-variant">
+                प्रत्यक्ष सहकारी संकलन • काभ्रे, धादिङ र सिन्धुपाल्चोक हबबाट एकीकृत लोड
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3 flex-wrap">
+              <!-- Progress Ring -->
+              <div class="flex items-center gap-3 bg-surface-container px-4 py-2 rounded-xl text-xs">
+                <div class="flex flex-col">
+                  <span class="text-[11px] text-on-surface-variant uppercase font-semibold">संकलन प्रगति</span>
+                  <span class="font-bold text-primary text-sm">९२% सुरक्षित (Safe)</span>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs">
+                  92%
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <button onclick="window.print()" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold transition-all">
+                <span class="material-symbols-outlined text-[16px]">print</span>
+                <span>डेलिभरी सूची प्रिन्ट</span>
+              </button>
+
+              <button onclick="triggerBulkSMS()" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-white text-xs font-bold shadow-sm hover:bg-primary-container transition-all">
+                <span class="material-symbols-outlined text-[16px]">sms</span>
+                <span>किसान र चालकलाई SMS पठाउनुहोस्</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 4 Metric KPI Cards Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          
+          <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-primary/5 flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-xs text-on-surface-variant font-medium">कुल अर्डरहरू</span>
+              <span class="font-headline-lg text-2xl font-bold text-on-surface">२८४</span>
+              <span class="text-[11px] text-primary flex items-center gap-0.5 mt-0.5">
+                <span class="material-symbols-outlined text-[13px]">trending_up</span> +१२% यो साता
+              </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-primary/5 flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-xs text-on-surface-variant font-medium">कुल संकलन तौल</span>
+              <span class="font-headline-lg text-2xl font-bold text-on-surface">१,४२० <span class="text-xs font-normal">केजी</span></span>
+              <span class="text-[11px] text-secondary flex items-center gap-0.5 mt-0.5">
+                <span class="material-symbols-outlined text-[13px]">eco</span> ३४ किसिमका ताजा बाली
+              </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined text-[24px]">scale</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-primary/5 flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-xs text-on-surface-variant font-medium">जोडिएका किसान</span>
+              <span class="font-headline-lg text-2xl font-bold text-on-surface">१९ <span class="text-xs font-normal">जना</span></span>
+              <span class="text-[11px] text-on-surface-variant mt-0.5">काभ्रे, धादिङ, मुडे</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-[24px]">groups</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-primary/5 flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-xs text-on-surface-variant font-medium">डेलिभरी सोसाइटी</span>
+              <span class="font-headline-lg text-2xl font-bold text-on-surface">१० <span class="text-xs font-normal">क्लस्टर</span></span>
+              <span class="text-[11px] text-primary flex items-center gap-0.5 mt-0.5">
+                <span class="material-symbols-outlined text-[13px]">check_circle</span> १००% रुट म्याप
+              </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-tertiary">
+              <span class="material-symbols-outlined text-[24px]">apartment</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Vehicle Loading Table & Real-time SMS Feed -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <div class="lg:col-span-8 bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-primary/5 flex flex-col gap-4">
+            <h3 class="font-headline-sm text-base font-bold text-on-surface flex items-center justify-between">
+              <span>सक्रिय संकलन भ्यान तथा सवारी परिचालन</span>
+              <span class="text-xs text-primary font-bold">२ वटा भ्यान सक्रिय</span>
+            </h3>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-surface-container text-on-surface-variant font-semibold">
+                    <th class="py-2.5">सवारी / रुट</th>
+                    <th class="py-2.5">चालक</th>
+                    <th class="py-2.5">लोड क्षमता</th>
+                    <th class="py-2.5">प्रस्थान</th>
+                    <th class="py-2.5">स्थिति</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-surface-container">
+                  <tr>
+                    <td class="py-3 font-bold text-on-surface">
+                      TRUCK-01 <br/><span class="font-normal text-on-surface-variant">काभ्रे - हब - ललितपुर</span>
+                    </td>
+                    <td class="py-3">विक्रम तामाङ <br/><span class="text-outline">बा २ ख ४५८९</span></td>
+                    <td class="py-3 font-semibold text-primary">८५० केजी (८५%)</td>
+                    <td class="py-3">बुधबार बिहान ५:३०</td>
+                    <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold">लोडिङ हुँदैछ</span></td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 font-bold text-on-surface">
+                      TRUCK-02 <br/><span class="font-normal text-on-surface-variant">धादिङ - मुडे - काठमाडौँ</span>
+                    </td>
+                    <td class="py-3">सुरेश श्रेष्ठ <br/><span class="text-outline">बा ३ ख ७८२१</span></td>
+                    <td class="py-3 font-semibold text-primary">१,१२० केजी (९३%)</td>
+                    <td class="py-3">बुधबार बिहान ४:४५</td>
+                    <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-bold">तयार</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Real-Time SMS Dispatch Log Feed -->
+          <div class="lg:col-span-4 bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-primary/5 flex flex-col gap-3">
+            <h3 class="font-headline-sm text-base font-bold text-on-surface flex items-center justify-between">
+              <span>SMS सूचना लग (Log)</span>
+              <button onclick="triggerBulkSMS()" class="text-xs text-primary font-bold hover:underline">+ पठाउनुहोस्</button>
+            </h3>
+
+            <div id="admin-sms-log" class="flex flex-col gap-2 max-h-72 overflow-y-auto">
+              <div class="p-2.5 rounded-lg bg-surface-container text-xs text-on-surface flex items-center justify-between">
+                <span class="flex items-center gap-1.5 font-semibold text-primary">
+                  <span class="material-symbols-outlined text-[14px]">done_all</span>
+                  हप्ता #४२ अर्डर सारांश १९ किसानलाई पठाइयो
+                </span>
+                <span class="text-outline">आज ८:००</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-surface-container text-xs text-on-surface flex items-center justify-between">
+                <span class="flex items-center gap-1.5 font-semibold text-primary">
+                  <span class="material-symbols-outlined text-[14px]">done_all</span>
+                  संकलन भ्यान १ ललितपुर रुट अलर्ट जारी
+                </span>
+                <span class="text-outline">हिजो साँझ</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ==========================================================================
+         MODAL 1: ORDER CONFIRMATION CELEBRATION MODAL
+         ========================================================================== -->
+    <div id="order-success-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl flex flex-col items-center text-center relative border border-primary/10 animate-[toastIn_0.3s_ease]">
+        
+        <div class="w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-3 shadow-lg">
+          <span class="material-symbols-outlined text-[36px]">verified</span>
+        </div>
+
+        <h2 class="font-headline-lg text-2xl font-bold text-on-surface">अग्रिम अर्डर सफल भयो!</h2>
+        <p class="font-body-sm text-sm text-on-surface-variant mt-1">तपाईंको अर्डर नम्बर: <strong class="text-primary font-bold">#HB-42981</strong></p>
+
+        <!-- Status Stepper Flow -->
+        <div class="w-full my-6 p-4 rounded-2xl bg-surface-container-low flex flex-col gap-3 text-left text-xs">
+          <div class="flex items-center justify-between text-on-surface font-bold text-sm border-b border-surface-container pb-2">
+            <span>डेलिभरी तालिका:</span>
+            <span id="modal-order-cycle" class="text-primary">बुधबार बिहान ७:०० - १०:०० बजे</span>
+          </div>
+          <div class="flex items-center justify-between text-on-surface">
+            <span>डेलिभरी हब:</span>
+            <span id="modal-order-society" class="font-semibold text-right">हात्तीवन क्लस्टर</span>
+          </div>
+          <div class="flex items-center justify-between text-on-surface">
+            <span>जम्मा रकम:</span>
+            <span id="modal-order-total" class="font-extrabold text-base text-primary">रु. २५५</span>
+          </div>
+        </div>
+
+        <!-- 4-Stage Stepper Preview -->
+        <div class="w-full grid grid-cols-4 gap-1 text-[10px] text-center mb-6">
+          <div class="flex flex-col items-center text-primary font-bold">
+            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mb-1">✓</span>
+            <span>अर्डर दर्ता</span>
+          </div>
+          <div class="flex flex-col items-center text-on-surface-variant">
+            <span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center mb-1">२</span>
+            <span>सोमबार टिपाइ</span>
+          </div>
+          <div class="flex flex-col items-center text-on-surface-variant">
+            <span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center mb-1">३</span>
+            <span>सफाई/प्याकिङ</span>
+          </div>
+          <div class="flex flex-col items-center text-on-surface-variant">
+            <span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center mb-1">४</span>
+            <span>बुधबार घरमा</span>
+          </div>
+        </div>
+
+        <button onclick="closeOrderSuccessModal()" class="w-full py-3.5 rounded-full bg-primary text-white font-bold text-sm shadow-md hover:bg-primary-container transition-all">
+          धन्यवाद, गृह पृष्ठमा फर्कनुहोस्
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODAL 2: VOICE SEARCH MODAL
+         ========================================================================== -->
+    <div id="voice-search-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl flex flex-col items-center text-center relative border border-primary/10">
+        <button onclick="closeVoiceSearchModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-container text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+
+        <div class="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center mb-3 shadow-md">
+          <span class="material-symbols-outlined text-[32px] text-secondary">mic</span>
+        </div>
+
+        <h3 class="font-headline-sm text-lg font-bold text-on-surface" data-i18n="voiceSearchTitle">नेपाली आवाजबाट खोज्नुहोस्</h3>
+        <p class="text-xs text-on-surface-variant mt-1 mb-4">कुनै पनि तरकारी वा फलफूलको नाम बोल्नुहोस्</p>
+
+        <div class="w-full p-4 rounded-2xl bg-surface-container-low flex flex-col gap-2 mb-4">
+          <span class="text-xs text-outline">नमुना भ्वाइस कमान्ड थिच्नुहोस्:</span>
+          <div class="flex flex-wrap gap-2 justify-center">
+            <button onclick="testVoiceSearch('गोलभेंडा')" class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-primary hover:text-white text-xs font-semibold shadow-xs transition-colors">"गोलभेंडा"</button>
+            <button onclick="testVoiceSearch('रायोको साग')" class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-primary hover:text-white text-xs font-semibold shadow-xs transition-colors">"रायोको साग"</button>
+            <button onclick="testVoiceSearch('मुडेको आलु')" class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-primary hover:text-white text-xs font-semibold shadow-xs transition-colors">"मुडेको आलु"</button>
+            <button onclick="testVoiceSearch('सुन्तला')" class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-primary hover:text-white text-xs font-semibold shadow-xs transition-colors">"सुन्तला"</button>
+          </div>
+        </div>
+
+        <button onclick="startVoiceRecognitionMicrophone()" class="w-full py-3 rounded-full bg-primary text-white font-bold text-xs shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">mic</span>
+          <span>अहिले सिधै बोल्नुहोस्</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         FOOTER
+         ========================================================================== -->
+    <footer class="w-full bg-surface-container text-on-surface mt-auto py-10 px-4 sm:px-margin-desktop border-t border-primary/10">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-on-surface-variant">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-[20px]">eco</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-bold text-sm text-on-surface">हाम्रो बारी (Hamro Baari)</span>
+            <span>नेपालको मौलिक प्राङ्गारिक कृषि संजाल • काभ्रे, धादिङ, मुडे</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button onclick="switchRole('home')" class="hover:text-primary">गृह</button>
+          <button onclick="switchRole('browse')" class="hover:text-primary">ताजा तरकारी</button>
+          <button onclick="switchRole('farmer')" class="hover:text-primary">किसान पोर्टल</button>
+          <button onclick="switchRole('admin')" class="hover:text-primary">व्यवस्थापक</button>
+        </div>
+
+        <div class="text-right">
+          <span>&copy; 2026 हाम्रो बारी प्रा. लि. • सर्वाधिकार सुरक्षित</span>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- Fixed Mobile Bottom Navigation Bar (Visible on mobile screens only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-xl border-t border-primary/10 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 flex items-center justify-around mobile-bottom-nav">
+      <button data-role="home" onclick="switchRole('home')" class="mobile-nav-item flex flex-col items-center justify-center gap-0.5 text-primary text-[10px] py-1 px-2 rounded-xl transition-all">
+        <div class="nav-icon-wrapper w-8 h-8 rounded-full flex items-center justify-center bg-primary/10 text-primary transition-all">
+          <span class="material-symbols-outlined text-[20px]">home</span>
+        </div>
+        <span class="nav-label font-bold text-primary">गृह</span>
+      </button>
+
+      <button data-role="browse" onclick="switchRole('browse')" class="mobile-nav-item flex flex-col items-center justify-center gap-0.5 text-on-surface-variant text-[10px] py-1 px-2 rounded-xl transition-all">
+        <div class="nav-icon-wrapper w-8 h-8 rounded-full flex items-center justify-center transition-all">
+          <span class="material-symbols-outlined text-[20px]">storefront</span>
+        </div>
+        <span class="nav-label">तरकारी</span>
+      </button>
+
+      <button data-role="cart" onclick="switchRole('cart')" class="mobile-nav-item flex flex-col items-center justify-center gap-0.5 text-on-surface-variant text-[10px] py-1 px-2 rounded-xl transition-all relative">
+        <div class="nav-icon-wrapper w-8 h-8 rounded-full flex items-center justify-center relative transition-all">
+          <span class="material-symbols-outlined text-[20px]">shopping_basket</span>
+          <span id="mobile-nav-cart-badge" class="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-secondary text-white text-[9px] font-bold flex items-center justify-center shadow-xs">३</span>
+        </div>
+        <span class="nav-label">झोला</span>
+      </button>
+
+      <button data-role="farmer" onclick="switchRole('farmer')" class="mobile-nav-item flex flex-col items-center justify-center gap-0.5 text-on-surface-variant text-[10px] py-1 px-2 rounded-xl transition-all">
+        <div class="nav-icon-wrapper w-8 h-8 rounded-full flex items-center justify-center transition-all">
+          <span class="material-symbols-outlined text-[20px]">mic</span>
+        </div>
+        <span class="nav-label">किसान</span>
+      </button>
+
+      <button data-role="admin" onclick="switchRole('admin')" class="mobile-nav-item flex flex-col items-center justify-center gap-0.5 text-on-surface-variant text-[10px] py-1 px-2 rounded-xl transition-all">
+        <div class="nav-icon-wrapper w-8 h-8 rounded-full flex items-center justify-center transition-all">
+          <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+        </div>
+        <span class="nav-label">व्यवस्थापक</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Supabase & Backend Client Layer -->
+  <script src="supabase_client.js"></script>
+
+  <!-- Interactive JavaScript Application -->
+  <script src="app.js"></script>
+
+  <!-- Voice Search Modal Helpers -->
+  <script>
+    function openVoiceSearchModal() {
+      const modal = document.getElementById('voice-search-modal');
+      if (modal) modal.classList.remove('hidden');
+      sfx.playChime('click');
+    }
+    function closeVoiceSearchModal() {
+      const modal = document.getElementById('voice-search-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+    function testVoiceSearch(term) {
+      closeVoiceSearchModal();
+      state.filters.search = term;
+      switchRole('browse');
+      const input = document.getElementById('catalog-search-input');
+      if (input) input.value = term;
+      sfx.playChime('success');
+      showToast('भ्वाइस खोजी नतिजा', `"${term}" का लागि ताजा उत्पादनहरू`, 'search');
+    }
+    function startVoiceRecognitionMicrophone() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRec();
+        recognition.lang = 'ne-NP';
+        recognition.start();
+        showToast('🎙️ सुन्दैछ...', 'Speak in Nepali now', 'mic');
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          testVoiceSearch(transcript);
+        };
+        recognition.onerror = function() {
+          testVoiceSearch('गोलभेंडा');
+        };
+      } else {
+        testVoiceSearch('गोलभेंडा');
+      }
+    }
+  </script>
+
+</body>
+</html>
